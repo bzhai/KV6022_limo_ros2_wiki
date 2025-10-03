@@ -117,7 +117,7 @@ ros2 action list
 
 * Install robot simulation software and all dependencies from the module repo.
 ```
-git clone https://github.com/kivrakh/KV6022_limo_ros2
+git clone https://github.com/kivrakh/KV6022_limo_ros2.git
 
 sudo apt-get install -y --no-install-recommends build-essential cmake git python3-pip ros-humble-rmw-cyclonedds-cpp ros-humble-rviz2* ros-humble-teleop-twist-keyboard ros-humble-xacro ros-humble-imu-tools ros-humble-image-* python3-colcon-common-extensions python3-rosdep
 
