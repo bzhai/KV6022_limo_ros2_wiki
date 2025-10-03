@@ -1,14 +1,14 @@
-The goal of this workshop is to make you familiar with the ROS 2 environment and LIMO robot platform which will be used throughout all remaining workshop sessions. This includes the robot's components and functionality, tools for remote operation, software development and simulation. We are going to use Visual Studio Code (VSC) which will serve as a development platform but also enable remote interaction with the robot. It is a fairly intuitive development environment but you might want to refer to some [docs](https://code.visualstudio.com/docs) if some of the concepts are not very clear.
+The goal of this workshop is to make you familiar with the ROS 2 environment and LIMO robot simulation platform which will be used throughout all remaining workshop sessions. This includes the robot's components and functionality, tools for remote operation, software development and simulation. 
 
-<!-- This content will not appear in the rendered Markdown -->
+We are going to use Visual Studio Code (VSC) which will serve as a development platform but also enable remote interaction with the robot. It is a fairly intuitive development environment but you might want to refer to some [docs](https://code.visualstudio.com/docs) and [installation](https://code.visualstudio.com/download) if some of the concepts are not very clear.
 
-Moreover, you will start using ROS tools for inspecting your robot sensor data and you will use teleoparation package for navigating your robot around.
+<!-- Moreover, you will start using ROS tools for inspecting your robot sensor data and you will use teleoparation package for navigating your robot around. -->
 
-Learning objectives
+**Learning objectives**
 1. Launch and manage multiple terminals efficiently. Practice essential Linux commands in a ROS 2 workspace layout.
-1. Run ROS 2 nodes (turtlesim), list nodes/topics/services/actions, and publish messages.
-3. Build and launch the LIMO Gazebo simulator; visualize sensors in RViz.
-4. Teleoperate a robot and publish /cmd_vel commands programmatically.
+1. Run ROS 2 nodes (turtlesim), list nodes/topics/services/actions and publish messages.
+3. Build and launch the LIMO Gazebo simulator, visualize nodes and topics.
+4. Teleoperate a robot and publish `/cmd_vel` commands programmatically.
 
 # 1. Install Terminator
 Terminator makes multiple terminals in one window. 
@@ -18,7 +18,7 @@ sudo apt install terminator
 ```
 * Open Terminator:
    * Click on the terminal icon from the startup
-   * Choose to Split Horizontally or Split Vertically by right-clicking a terminal window to have multiple terminal windows
+   * Choose to "Split Horizontally" or "Split Vertically" by right-clicking a terminal window to have multiple terminal windows
 * Try to achieve three terminal windows (1x2, 2x2) that look like so
 ![alt](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/terminator.png)
 
@@ -138,30 +138,32 @@ You should see Gazebo driving area world with the LIMO robot:
 
 
 # 5. Basic ROS 2 operations
-1. Inspect nodes & topics:
+1. Inspect nodes & topics: Inspect the robot's nodes and topics by using the `ros2 node` and `ros2 topic` commands. When you type the command without any additional arguments, you should see all available options. Display and compare the format of the following topics `/odom`, `/scan`, `/tf` and `/depth_camera/color/image_raw`. You might also want to refer to the official [node](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html) and [topic](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html) tutorials.
 
-Inspect the robot's nodes and topics by using the `ros2 node` and `ros2 topic` commands. When you type the command without any additional arguments, you should see all available options. Display and compare the format of the following topics /odom, /scan, /tf and /camera/color/image_raw. You might also want to refer to the official [node](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html) and [topic](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html) tutorials.
+<!-- 2. Now, let us use the graphical visualiser [RVIZ](https://github.com/ros2/rviz) to look at the robot and its sensor topics. Start by typing rviz2 -d src/limo_description/rviz/model_sensors_real.rviz which uses a pre-defined configuration file, and you should see the interface with a robot model and its sensor data displayed in the robot's touch screen (and your VNC screen too!). To get familiar with the interface, adjust the laser scan visualisation options and see how these affect the output. Try to add new visualisation for sensors not included in the provided configuration (e.g. odometry). -->
 
-2. Now, let us use the graphical visualiser [RVIZ](https://github.com/ros2/rviz) to look at the robot and its sensor topics. Start by typing rviz2 -d src/limo_description/rviz/model_sensors_real.rviz which uses a pre-defined configuration file, and you should see the interface with a robot model and its sensor data displayed in the robot's touch screen (and your VNC screen too!). To get familiar with the interface, adjust the laser scan visualisation options and see how these affect the output. Try to add new visualisation for sensors not included in the provided configuration (e.g. odometry).
+2. Teleoperate
+In a new terminal start the keyboard teleoperation node `ros2 run teleop_twist_keyboard teleop_twist_keyboard` and drive the robot around using the keyboard. Use the on-screen key hints to drive.
 
-3. Teleoperation. Leave the RVIZ running. In a new terminal start the keyboard teleoperation node `ros2 run teleop_twist_keyboard teleop_twist_keyboard` and drive the robot around using the keyboard. Have fun, but pay attention to other robots and your human fellows, though!
-
-4. Let's now send some basic robot control commands using ROS topics. The robot's speed can be controlled by the /cmd_vel topic. Use the ros2 topic pub functionality to send a single Twist message (linear and angular velocity command) as in this example:
-
+3. Publish velocity commands. Let's now send some basic robot control commands using ROS topics. The robot's speed can be controlled by the `/cmd_vel` topic. Use the `ros2 topic pub` functionality to send a single Twist message (linear and angular velocity command) as in this example:
 ```
 ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.5}}"
 ```
-Now, adjust the linear components of the Twist message and see the resulting trajectory.
+Now, adjust the `linear.x` and `angular.z` components of the Twist message and see the resulting trajectory.
 
-5. Using your knowledge of the topic publishing, issue a series of commands that will drive the robot:
+4. Using your knowledge of the topic publishing, issue a series of commands that will drive the robot:
+    * in a circle with a radius of 0.5 m
+        * Hint: v=𝜔⋅r. Choose linear.x = 0.25, angular.z = 0.5;
+    * in a 1 m square, stop, rotate ~90°, repeat.
 
-    * in a circle with a radius of 0.5 m;
-    * in a 1 m square.
+Try using as few commands as possible. Publish a short repeating twist (hint: omit `--once` and use `--rate`)
 
-Try using as few commands as possible.
+`ros2 topic pub --rate 5 /cmd_vel geometry_msgs/msg/Twist '{...}'`
 
-# 3. Additional tasks
+Use `Ctrl-C` to stop publishing.
 
-* Learn more about the [nodes](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html) and [topics](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html). Whilst these concepts will be covered later in the course, this will give you a first glimpse into various ROS functionality associated with LIMO.
-* Learn how to create a simple ROS2 [publisher node](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html) and modify the example such that it sends a single /cmd_vel command to control LIMO from the script.
+# 6. Additional tasks
+
+* Learn more about the [nodes](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html) and [topics](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html). Whilst these concepts will be covered later in the module, this will give you a first glimpse into various ROS functionality associated with LIMO.
+* Learn how to create a simple ROS2 [publisher node](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html) and modify the example such that it sends a single `/cmd_vel` command to control LIMO from the script.
 
