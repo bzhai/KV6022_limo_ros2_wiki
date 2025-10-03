@@ -1,53 +1,89 @@
-The goal of this workshop is to make you familiar with the LIMO robot platform which will be used throughout all remaining workshop sessions. This includes the robot's components and functionality, tools for remote operation, software development and simulation. We are going to use Visual Studio Code (VSC) which will serve as a development platform but also enable remote interaction with the robot. It is a fairly intuitive development environment but you might want to refer to some [docs](https://code.visualstudio.com/docs) if some of the concepts are not very clear.
+The goal of this workshop is to make you familiar with the ROS 2 environment and LIMO robot platform which will be used throughout all remaining workshop sessions. This includes the robot's components and functionality, tools for remote operation, software development and simulation. We are going to use Visual Studio Code (VSC) which will serve as a development platform but also enable remote interaction with the robot. It is a fairly intuitive development environment but you might want to refer to some [docs](https://code.visualstudio.com/docs) if some of the concepts are not very clear.
+
+<!-- This content will not appear in the rendered Markdown -->
 
 Moreover, you will start using ROS tools for inspecting your robot sensor data and you will use teleoparation package for navigating your robot around.
 
+Learning objectives
+1. Launch and manage multiple terminals efficiently. Practice essential Linux commands in a ROS 2 workspace layout.
+1. Run ROS 2 nodes (turtlesim), list nodes/topics/services/actions, and publish messages.
+3. Build and launch the LIMO Gazebo simulator; visualize sensors in RViz.
+4. Teleoperate a robot and publish /cmd_vel commands programmatically.
+
 # 1. Install Terminator
-Install terminator (enabling the management of several terminals in a single window.) using debian package:
+Terminator makes multiple terminals in one window. 
+* Install terminator using debian package:
 ```
 sudo apt install terminator
 ```
-To open the terminator:
-* click on the terminal icon from the startup
-* choose to Split Horizontally or Split Vertically by right-clicking a terminal window to have multiple terminal windows
-* Try to achieve three terminal windows that look like so
+* Open Terminator:
+   * Click on the terminal icon from the startup
+   * Choose to Split Horizontally or Split Vertically by right-clicking a terminal window to have multiple terminal windows
+* Try to achieve three terminal windows (1x2, 2x2) that look like so
 ![alt](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/terminator.png)
 
-# 2. Using Linux Terminal
+# 2. Linux Terminal Warm-Up
+Practice essential commands while creating a simple ROS 2 workspace.
 
-* Type `mkdir -p ros2_ws/src`, then `ls`
-You will see there is a new folder `ros2_ws` and a `src` folder inside `ros2_ws`. 
-Directories, like `ros2_ws`, are colored in blue.
-* Enter `pwd` into the terminal
+* Create a workspace (directory):
+```
+mkdir -p ~/ros2_ws/src
+ls
+```
+You will see there is a blue `ros2_ws` directory and a `src` folder inside it. 
+* Where am I?
+```
+pwd
+```
 This will show you the full path of the directory you are working in.
-* Enter `cd ros2_ws` into the terminal.
-The prompt should change to directory to `ros2_ws`
-Typing `pwd` will show you now in the `ros2_ws` directory
-* Enter `cd ..` into the terminal  (`..` is the parent folder.)
+* Move into the workspace:
+```
+cd ~/ros2_ws
+pwd
+```
+The prompt should change to the directory `ros2_ws`
+* Go up one level
+```
+cd ..
+```
 The prompt should therefore indicate the parent folder `home`
-* Type `touch ~/ros2_ws/src/hello_world.py && cd ~/ros2_ws/src`
-This will create a new document named “hello_world.py” under ros_ws/src directory
-* Type `mv hello_world.py hello_world2.py`, followed by `ls`.
+* Create a file and move into `src`:
+```
+touch ~/ros2_ws/src/hello_world.py && cd ~/ros2_ws/src
+ls
+```
+This will create a new document named `hello_world.py` under `ros_ws/src` directory
+* Rename a file:
+```
+mv hello_world.py hello_world2.py
+ls
+```
 You will notice that the file has been renamed to `hello_world2.py`.
 This step shows how `mv` can rename or move files to directories.
-* Type `cp hello_world2.py ~/ros2_ws/hello_world2.py`, then `ls ~/ros2_ws`
-You will see that test.txt has been copied to test copy.txt
-* Type `rm hello_world2.py`, then `ls`
+* Copy a file: 
+```
+cp hello_world2.py ~/ros2_ws/hello_world2.py
+ls ~/ros2_ws
+```
+You should now see `hello_world2.py` in the workspace root.
+* Remove a file:
+```
+rm hello_world2.py
+ls
+```
 You will notice that `hello_world2.py` is no longer there.
 
 
-# 3. [Using turtlesim](https://docs.ros.org/en/humble/Tutorials/Beginner-CLI-Tools/Introducing-Turtlesim/Introducing-Turtlesim.html)
+# 3. First ROS 2 App: Turtlesim
 
-Turtlesim is a lightweight simulator for learning ROS 2. It illustrates what ROS 2 does at the most basic level to give you an idea of what you will do with a real robot or a robot simulation later on.
+Turtlesim is a lightweight 2D simulator or graphical user interface for learning core ROS 2 concepts, like nodes, topics, and services. It illustrates what ROS 2 does at the most basic level to give you an idea of what you will do with a real robot or a robot simulation later on. All of these concepts will be elaborated on in later workshops.
 
-This tutorial touches upon core ROS 2 concepts, like nodes, topics, and services. All of these concepts will be elaborated on in later tutorials; for now, you will simply set up the tools and get a feel for them.
-
-* Install the turtlesim package for your ROS 2 Humble:
+* Install the `turtlesim` package for your ROS 2 Humble:
 ```
 sudo apt update
 sudo apt install ros-humble-turtlesim
 ```
-* Start turtlesim
+* Launch turtlesim simulator
 ```
 ros2 run turtlesim turtlesim_node
 ```
@@ -56,21 +92,20 @@ Under the command, you will see messages from the node. There you can see the de
 The simulator window should appear, with a random turtle in the center.
 ![alt](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/turtlesim.png)
 
-*Use turtlesim
-Open a new terminal and source ROS 2 again.
+* Use turtlesim
 
-Now you will run a new node to control the turtle in the first node:
+Open or use a new terminal. Now you will run a new node (`turtle_teleop_key`) to control the turtle in the first node:
 ```
 ros2 run turtlesim turtle_teleop_key
 ```
-At this point you should have three windows open: a terminal running `turtlesim_node`, a terminal running `turtle_teleop_key` and the turtlesim window. Arrange these windows so that you can see the turtlesim window, but also have the terminal running `turtle_teleop_key` active so that you can control the turtle in turtlesim.
+At this point you should have three windows open: a terminal running `turtlesim_node`, a terminal running `turtle_teleop_key` and the `turtlesim` window. Arrange these windows so that you can see the turtlesim window, but also have the terminal running `turtle_teleop_key` active so that you can control the turtle in turtlesim.
 
-Use the arrow keys on your keyboard to control the turtle. It will move around the screen, using its attached “pen” to draw the path it followed so far.
+Keep the teleop terminal focused and use arrow keys on your keyboard to control/move the turtle. It will move around the screen, using its attached "pen" to draw the path it followed so far.
 
 > [!NOTE]
 > Pressing an arrow key will only cause the turtle to move a short distance and then stop. This is because, realistically, you wouldn’t want a robot to continue carrying on an instruction if, for example, the operator lost the connection to the robot.
 
-You can see the nodes, and their associated topics, services, and actions, using the `list` subcommands of the respective commands:
+* In a another terminal , explore the ROS 2 nodes, and their associated topics, services, and actions, using the `list` subcommands of the respective commands:
 ```
 ros2 node list
 ros2 topic list
@@ -78,12 +113,9 @@ ros2 service list
 ros2 action list
 ```
 
-# 1. Build and run the ROS2 LIMO Gazebo Simulator
-For the LIMO simulator, we are going to use the [ROS2 Humble (https://docs.ros.org/en/humble/index.html) release which runs exclusively on [Ubuntu 22.04.3 LTS](https://releases.ubuntu.com/jammy/). The simulator can either be deployed using a docker container (this is a default option for the lab PCs) or be installed natively on your PC or a virtual machine (e.g. [VMWare Workstation Player](https://www.vmware.com/uk/products/workstation-player.html)), depending on how comfortable you feel with each option and also what PC hardware and OS you have at home. If you struggle with any of the following steps, please ask the staff for help during workshops.
+# 4. Build and run the ROS 2 LIMO Gazebo Simulator
 
-Please ensure that all software updates on your Ubuntu OS are completed before commencing with the rest of the instructions.
-
-* Install robot simulation software and all dependencies.
+* Install robot simulation software and all dependencies from the module repo.
 ```
 git clone https://github.com/kivrakh/KV6022_limo_ros2
 
@@ -91,18 +123,24 @@ sudo apt-get install -y --no-install-recommends build-essential cmake git python
 
 sudo rosdep init
 rosdep update
+cd ~/KV6022_limo_ros2
 rosdep install --from-paths src -y --ignore-src
 ```
 
-* Build and Run the simulator and check that everything is running as expected
+* Build and Run Gazebo simulator and check that everything is running as expected
 ```
-cd KV6022_limo_ros2 && ./build.sh
+colcon build --symlink-install # run inside the repo (KV6022_limo_ros2)
 source install/setup.bash
 ros2 launch limo_gazebosim limo_gazebo_diff.launch.py
 ```
+You should see Gazebo driving area world with the LIMO robot:
 ![alt](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/gazebo_limo.jpg)
-# 2. Basic operations
-1. Inspect the robot's nodes and topics by using the ros2 node and ros2 topic commands (in a new terminal, no need to source this time). When you type the command without any additional arguments, you should see all available options. Display and compare the format of the following topics /odom, /scan, /tf and /camera/color/image_raw. You might want to also refer to the official [node](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html) and [topic](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html) tutorials.
+
+
+# 5. Basic ROS 2 operations
+1. Inspect nodes & topics:
+
+Inspect the robot's nodes and topics by using the `ros2 node` and `ros2 topic` commands. When you type the command without any additional arguments, you should see all available options. Display and compare the format of the following topics /odom, /scan, /tf and /camera/color/image_raw. You might also want to refer to the official [node](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html) and [topic](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html) tutorials.
 
 2. Now, let us use the graphical visualiser [RVIZ](https://github.com/ros2/rviz) to look at the robot and its sensor topics. Start by typing rviz2 -d src/limo_description/rviz/model_sensors_real.rviz which uses a pre-defined configuration file, and you should see the interface with a robot model and its sensor data displayed in the robot's touch screen (and your VNC screen too!). To get familiar with the interface, adjust the laser scan visualisation options and see how these affect the output. Try to add new visualisation for sensors not included in the provided configuration (e.g. odometry).
 
