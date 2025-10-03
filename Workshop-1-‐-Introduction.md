@@ -108,8 +108,14 @@ Keep the teleop terminal focused and use arrow keys on your keyboard to control/
 * In a another terminal , explore the ROS 2 nodes, and their associated topics, services, and actions, using the `list` subcommands of the respective commands:
 ```
 ros2 node list
+```
+```
 ros2 topic list
+```
+```
 ros2 service list
+```
+```
 ros2 action list
 ```
 
