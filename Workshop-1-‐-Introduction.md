@@ -76,6 +76,16 @@ You will notice that `hello_world2.py` is no longer there.
 
 # 3. First ROS 2 App: Turtlesim
 
+> [!IMPORTANT] 
+>## Quick fix on ROS 2 Networking
+>If we wanted to avoid other devices' nodes, we can use the `ROS_LOCALHOST_ONLY` environment variable to limit communication to only nodes >on the same device. To keep communications on your own machine only (Local host only variable), set by adding it to your `~/.bashrc` and the daemon (discovery of nodes) must be restarted for changes in the environment to be propagated:
+>```
+>echo 'export ROS_LOCALHOST_ONLY=1' >> ~/.bashrc
+>source ~/.bashrc
+>ros2 daemon stop
+>ros2 daemon start
+>```
+
 Turtlesim is a lightweight 2D simulator or graphical user interface for learning core ROS 2 concepts, like nodes, topics, and services. It illustrates what ROS 2 does at the most basic level to give you an idea of what you will do with a real robot or a robot simulation later on. All of these concepts will be elaborated on in later workshops.
 
 * Install the `turtlesim` package for your ROS 2 Humble:
