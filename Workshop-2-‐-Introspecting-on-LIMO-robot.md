@@ -44,8 +44,8 @@ Once installed, open the extensions tab `CTRL+SHIFT+X` and search for `ROS`. Ins
 You can then select `File > Open Folder`. Navigate to your ROS 2 workspace (e.g., `KV6022_limo_ros2/src`) and open the folder. You can now use VS Code to manage and edit ROS packages.
 
 ## 4. Create a new ROS 2 package and Build
-A single workspace can contain as many packages as you want, each in their own folder. Best practice is to have a `src` folder within your workspace, and to create your packages in there. Observe that under `KV6022_limo_ros2/src` workspace there exists `limo_description`, `limo_gazebosim` and `limo_msgs` packages. So, navigate into `KV6022_limo_ros2/src`, and run the package creation command.
-* So, navigate into `KV6022_limo_ros2/src` and decide on a name for your package and create it to keep all your work in it (e.g, `Week2_lab`) - you may want to follow the [official instructions](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-Your-First-ROS2-Package.html).
+A single workspace can contain as many packages as you want, each in their own folder. Best practice is to have a `src` folder within your workspace, and to create your packages in there. Observe that under `KV6022_limo_ros2/src` workspace there exists `limo_description`, `limo_gazebosim` and `limo_msgs` packages.
+* So, navigate into `KV6022_limo_ros2/src` and decide on a name for your package and run the package creation command to keep all your work in it (e.g, `Week2_lab`) - you may want to follow the [official instructions](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-Your-First-ROS2-Package.html).
 
 <!-- Make sure you are in the `src` folder before running the package creation command.
 
