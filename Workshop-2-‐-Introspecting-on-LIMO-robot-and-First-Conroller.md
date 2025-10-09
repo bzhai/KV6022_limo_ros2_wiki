@@ -173,11 +173,8 @@ ros2 run Week2_lab command_publisher
 >```
 >Week2_lab command_publisher
 >```
-<!---
+
 ## Extension Tasks
-* Try to customize your controller for all the different types of steering types of LIMO which are diffential drive, mecanum drive and ackerman drive.
-* Circle (r ≈ 0.5 m): choose 
-ω=0.5rad/s⇒v=ωr=0.25m/s.
-Publish at 10 Hz for ~25 s, or code it in your node.
-* Square (1 m sides): go straight 1 m (v=0.2 → 5 s), stop, turn 90° (ω=0.5 → ~3.14 s), repeat ×4.
--->
+* Adapt your controller for LIMO differential and mecanum mode by publishing to `/cmd_vel` accordingly.
+* Drive the robot to move in a circle
+* Draw a square. Go straight, stop, turn 90°. Repeat it four times.
