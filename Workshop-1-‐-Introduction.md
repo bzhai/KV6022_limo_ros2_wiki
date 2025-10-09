@@ -2,8 +2,6 @@ The goal of this workshop is to make you familiar with the ROS 2 environment and
 
 We are going to use Visual Studio Code (VSC) which will serve as a development platform but also enable remote interaction with the robot. It is a fairly intuitive development environment but you might want to refer to some [docs](https://code.visualstudio.com/docs) and [installation](https://code.visualstudio.com/download) if some of the concepts are not very clear.
 
-<!-- Moreover, you will start using ROS tools for inspecting your robot sensor data and you will use teleoparation package for navigating your robot around. -->
-
 **Learning objectives**
 1. Launch and manage multiple terminals efficiently. Practice essential Linux commands in a ROS 2 workspace layout.
 1. Run ROS 2 nodes (turtlesim), list nodes/topics/services/actions and publish messages.
@@ -20,7 +18,7 @@ sudo apt install terminator
    * Click on the terminal icon from the startup
    * Choose to "Split Horizontally" or "Split Vertically" by right-clicking a terminal window to have multiple terminal windows
 * Try to achieve three terminal windows (1x2, 2x2) that look like so
-![alt](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/terminator.png)
+<img src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/terminator.png" width="1000">
 
 # 2. Linux Terminal Warm-Up
 Practice essential commands while creating a simple ROS 2 workspace.
@@ -100,6 +98,7 @@ ros2 run turtlesim turtlesim_node
 Under the command, you will see messages from the node. There you can see the default turtle’s name and the coordinates where it spawns.
 
 The simulator window should appear, with a random turtle in the center.
+
 ![alt](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/turtlesim.png)
 
 * Use turtlesim
@@ -143,10 +142,13 @@ cd ~/KV6022_limo_ros2
 rosdep install --from-paths src -y --ignore-src
 ```
 
-* Build and Run Gazebo simulator and check that everything is running as expected
+* Build and Source Gazebo simulator
 ```
 colcon build --symlink-install # run inside the repo (KV6022_limo_ros2)
 source install/setup.bash
+```
+* Run Gazebo simulator and check that everything is running as expected
+```
 ros2 launch limo_gazebosim limo_gazebo_diff.launch.py
 ```
 You should see Gazebo driving area world with the LIMO robot:
