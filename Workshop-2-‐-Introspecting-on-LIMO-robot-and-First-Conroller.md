@@ -115,10 +115,10 @@ You can run your node in two ways:
 
 If you want to execute the script without `ros2 run`, make it executable and call it:
 ```
-chmod +x ~/KV6022_limo_ros2/src/Week2_lab/scripts/command_publisher.py
+chmod +x ~/KV6022_limo_ros2/src/Week2_lab/Week2_lab/command_publisher.py
 ```
 ```
-python3 ~/KV6022_limo_ros2/src/Week2_lab/scripts/command_publisher.py
+python3 ~/KV6022_limo_ros2/src/Week2_lab/Week2_lab/command_publisher.py
 ```
 To use with `ros2 run`, we need an additional step to make it deployable in a place where ros2 run can find it.
 1. Modify `package.xml` with any additional runtime dependencies.
