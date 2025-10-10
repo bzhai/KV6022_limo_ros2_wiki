@@ -121,12 +121,13 @@ chmod +x ~/KV6022_limo_ros2/src/Week2_lab/Week2_lab/command_publisher.py
 python3 ~/KV6022_limo_ros2/src/Week2_lab/Week2_lab/command_publisher.py
 ```
 To use with `ros2 run`, we need an additional step to make it deployable in a place where ros2 run can find it.
-1. Modify `package.xml` with any additional runtime dependencies.
+<!-- 1. Modify `package.xml` with any additional runtime dependencies.
 ```
 <exec_depend>rclpy</exec_depend>
 <exec_depend>geometry_msgs</exec_depend>
 ```
-2. Modify the `setup.py` file. To do so, we modify the `console_scripts key` in the `entry_points` dictionary to have our new node in a specific format (The name of the node when calling it through ros2 run = The name of the package.The name of the script, without the `.py` extension. The function, within the script, that will be called. In general, `main`)
+-->
+1. Modify the `setup.py` file. To do so, we modify the `console_scripts key` in the `entry_points` dictionary to have our new node in a specific format (The name of the node when calling it through ros2 run = The name of the package.The name of the script, without the `.py` extension. The function, within the script, that will be called. In general, `main`)
 <pre>
 from setuptools import find_packages, setup
 package_name = 'Week2_lab'
@@ -154,7 +155,7 @@ setup(
     },
 )
 </pre>
-3. Build and source 
+2. Build and source 
 ```
 cd ~/KV6022_limo_ros2/
 colcon build
