@@ -4,7 +4,7 @@ In this workshop, you will implement and test three different control algorithms
 2. Proportional (P) Controller
 3. Kinematic Controller
 
-You'll implement them in a single ROS 2 package containing a Python node that:
+You'll implement them in a given ROS 2 package (`trajectory_skeleton`) containing a Python node (`trajectory_tracking_controller.py`) that:
 * Subscribes to `/waypoint_cmd`: receives the next waypoint that the robot needs to travel (published by the `trajectory_publisher` node).
 * Subscribes to `/odom`: gets the robot's current position and orientation according to the robot's odometry.
 * Publishes to `/cmd_vel`: sends velocity commands to drive the robot to each point in the path.
