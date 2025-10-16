@@ -6,7 +6,7 @@ In this workshop, you will implement and test three different control algorithms
 
 You'll implement them in a given ROS 2 package (`trajectory_skeleton`) containing a Python node (`trajectory_tracking_controller.py`) that:
 * Subscribes to `/waypoint_cmd`: receives the next waypoint that the robot needs to travel (published by the `trajectory_publisher` node).
-* Subscribes to `/odom`: gets the robot's current position and orientation according to the robot's odometry.
+* Uses `tf` library to obtain the robot's current position and orientation according to the robot's odometry by transforming from the `odom` frame to the `base_link` frame.
 * Publishes to `/cmd_vel`: sends velocity commands to drive the robot to each point in the path.
 
 ### 1. Environment Setup
@@ -38,7 +38,7 @@ The gazebo and trajectory_publisher will start publishing and subscribing the fo
 >|Data | Topic | Message Type | Notes|
 >-- | -- | -- | --
 >|Next waypoint | `/waypoint_cmd` | `geometry_msgs/Transform` | Provided by trajectory_publisher|
->|Robot odometry | `/odom` | `nav_msgs/Odometry` | Pose + twist|
+>|Robot pose | `tf2_ros` transform lookup | transform between `odom` → `base_link` | Pose |
 >|Velocity command | `/cmd_vel` | `geometry_msgs/Twist` | Publish here|
 >|Route visualization | `/visualization_marker_array` | visualization_msgs/MarkerArray | For RViz display|
 
