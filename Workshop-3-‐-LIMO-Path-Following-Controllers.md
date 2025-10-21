@@ -10,7 +10,7 @@ You'll implement them in a given ROS 2 package (`trajectory_skeleton`) containin
 * Publishes to `/cmd_vel`: sends velocity commands to drive the robot to each point in the path.
 
 ### 1. Environment Setup
-* Pull changes from the [repo](https://github.com/kivrakh/KV6022_limo_ros2) and instal dependencies:
+* Pull changes from the [repo](https://github.com/kivrakh/KV6022_limo_ros2) and install dependencies while you are in your root workspace of `KV6022_limo_ros2/`:
 ```
 git pull origin main
 sudo apt install ros-humble-tf-transformations
@@ -77,7 +77,7 @@ The best way to investigate this setup is to have different terminals/windows ar
 
 ### 5. Implement Your Controllers
 Now you are in a position to edit the controller file `trajectory_tracking_controller.py`, and run the controller (as above) to see how it performs. Your code would normally go at the bottom of the file `trajectory_tracking_controller.py` where it says `DRIVE THE
-ROBOT HERE`. You will need to make use of the variables calculated above that point in the code called `waypoint.translation.x`, `waypoint.translation.y`, `waypoint_theta`, `robot_pose.getOrigin().x`, `robot_pose.getOrigin().y`, and `robot_theta`.
+ROBOT HERE`. You will need to make use of the variables calculated above that point in the code called `waypoint.translation.x`, `waypoint.translation.y`, `wtheta`, `robot_pose.transform.translation.x`, `robot_pose.transform.translation.y`, and `theta`.
 
 1. Controller 1 – **On/Off Controller**
 * Implement the on-off algorithm:
