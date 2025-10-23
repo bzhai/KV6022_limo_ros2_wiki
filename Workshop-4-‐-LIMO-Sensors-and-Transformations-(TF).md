@@ -5,7 +5,11 @@ The objectives of this workshop are
 * Extend it to a simple obstacle-avoidance controller.
 
 ### 1. Get to know LIMO sensors
-
+* Pull changes from the [repo](https://github.com/kivrakh/KV6022_limo_ros2) while you are in your root workspace of `KV6022_limo_ros2/`:
+```
+git pull origin main
+```
+* Build and Source the workspace
 * Open up the simulation environment and find out what type of sensor data they are and which topics they publish.
     * Hint: You should observe and echo
         * `/scan` topic in type of [LaserScan](https://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/LaserScan.html)
