@@ -45,7 +45,7 @@ ranges:                          # length ~360
    * Hint: Write a Python node to subscribe to the `/scan` topic and print the distance to the nearest and furthest obstacle in meters. You can make the robot move using keyboard teleop.
 
 ### 2. TF tree and Publishing the closest point as a Marker
-* Display the tf tree of the LIMO robot (`ros2 run rqt_tf_tree rqt_tf_tree`) and understand what a frame is ([ROS 2 tf2 introduction](https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Introduction-To-Tf2.html) might help, as might this [paper](http://wiki.ros.org/Papers/TePRA2013_Foote?action=AttachFile&do=view&target=TePRA2013_Foote.pdf)) 
+* Display the tf tree of the LIMO robot (`ros2 run rqt_tf_tree rqt_tf_tree`) and understand what a frame is (ROS 2 tf2 [theoritical](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Tf2.html) and [practical](https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Introduction-To-Tf2.html) introduction might help, as might this [paper](http://wiki.ros.org/Papers/TePRA2013_Foote?action=AttachFile&do=view&target=TePRA2013_Foote.pdf)) 
     * If `rqt_tf_tree` is not installed. install with 
 ```
 sudo apt update && sudo apt install ros-humble-rqt-tf-tree
