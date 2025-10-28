@@ -46,11 +46,9 @@ All the source code shown in the demonstration is available [here](https://githu
 > * Contours: Curves joining continuous points along a boundary; useful for blob detection.
 
 ### Task 3: Colour detection
-* [colour_contours_detector.py](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/example_codes/colour_contours_detector.py) node demonstrates how to subscribe to LIMO's image topics, perform colour thresholding and object detection. To test the node, run the simulator and try to place the greenery in front of the robot. You might move the robot to detect other green objects around. You should see the debug windows visualising the image processing pipeline. The node outputs the detected objects as the `/object_polygon` topic.
+* [colour_contours_detector.py](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/example_codes/colour_contours_detector.py) node demonstrates how to subscribe to LIMO's image topics, perform colour thresholding and object detection. To test the node, run the simulator and try to place the greenery in front of the robot by adjusting the range of the HSV colour filter accordingly. You might move the robot to detect other green objects around. You should see the debug windows visualising the image processing pipeline. The node outputs the detected objects as the `/object_polygon` topic.
 
 <img width="800" height="300" class="center" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/color_detector.png" />
-
-* As an extension, put some nice coloured objects in front of the robot (in Gazebo objects can be added in the `insert` tab and under the `models.gazebosim.org` list at the bottom, this may a few minutes to load all the objects). Try out different colours of the objects and adjust the range of the HSV colour filter accordingly. To change the colour of the simulated objects, right-click on the object and select `"Edit model"`. In the Model Editor, right-click on the object again and select `"Open Link Inspector"`. In the Visual tab, select the `visual/Material/Scrip/Name` field and change its value to a different Gazebo material (e.g. `Gazebo/Green`). Click OK, save the model as `unit_sphere_green` for example and close the Model Editor. Restart the simulator if needed. See the following [list](https://wiki.ros.org/simulator_gazebo/Tutorials/ListOfMaterials) for more information about the Gazebo materials.
 
 ### Task 5: Object Detection : Feature-based Approach
 
@@ -61,9 +59,24 @@ All the source code shown in the demonstration is available [here](https://githu
 sudo apt-get install ros-humble-find-object-2d
 ```
 * Run the object detection node: `ros2 run find_object_2d find_object_2d image:=<image_topic>`
-* Train and detect objects by marking areas in images, such as a cylinder, and save the model to inspect object information published on the `objects` topic ("Train" an object detector (simply mark a rectangular area of the image to indicate the object's binding box) and save the model (i.e. a simple image) into a directory). Inspect the `objects` topic (see [find\_object\_2d](http://wiki.ros.org/find\_object\_2d)) and see if you can find the size and location of the object. 
-* Compare the detection robustness against the colour detector from the previous task.
-* Try running the node in a non-interactive mode with your saved model: `ros2 run find_object_2d find_object_2d --ros-args -r image:=/limo_camera/image -p objects_path:=[path_to_your_objects] -p gui:=false`.
+* Put some nice coloured objects in front of the robot (in Gazebo objects can be added in the `insert` tab and under the `models.gazebosim.org` list at the bottom, this may a few minutes to load all the objects). 
+* Train and detect objects by marking areas in images, such as a coke can, and inspect object information published on the `objects` topic. To train an object detector, first choose a detector/descriptor via GUI.
+    * In the Find‑Object window:
+    * `View` → `Parameters`.
+    * Under `Feature2D` → `Detector/Descriptor`, start with ORB. You can later try FAST/SIFT or BRISK and compare.
+   
+<img width="800" height="300" class="center" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/find_object.png" />
+
+*  Then click `Edit` → `Add object from scene`. Drag a rectangle tightly around the object to indicate the object's binding box and confirm (Enter/OK). This creates Object #N in the database.
+* (Optional) `File` → `Save objects to a directory` (so you can reuse later in headless mode). 
+
+`ros2 run find_object_2d find_object_2d --ros-args -r image:=/limo_camera/image -p objects_path:=[path_to_your_objects] -p gui:=false`
+* You should immediately see green boxes and keypoints when the object is recognized in subsequent frames.
+* Inspect detections in the `objects` topic `ros2 topic echo /objects` (see [find_object_2d](http://wiki.ros.org/find_object_2d)) and see if you can find the size and location of the object. You will see lines like `id` `x` `y` `w` `h` `...` (and in /objectsStamped, the same info with header/time). These give you the approximate location and size in image pixels. 
+
+<img width="800" height="300" class="center" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/detected_object.png" />
+
+* To test detector robustness on scale and viewpoint changes, move the robot closer/farther or move the object to observe how detector reflects size changes. If detection drops, add another training view by repeating `Add object from scene` from a new viewpoint.
 
 ### Task 6: Object Detection : Deep Learning-based Approach
 For CNN-based object detection, we will use [YOLO](https://pjreddie.com/darknet/yolo/) which first introduced on its [original paper](https://pjreddie.com/media/files/papers/yolo_1.pdf).
