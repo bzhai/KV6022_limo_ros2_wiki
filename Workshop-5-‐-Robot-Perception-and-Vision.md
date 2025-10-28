@@ -82,6 +82,7 @@ sudo apt-get install ros-humble-find-object-2d
 For CNN-based object detection, we will use [YOLO](https://pjreddie.com/darknet/yolo/) which first introduced on its [original paper](https://pjreddie.com/media/files/papers/yolo_1.pdf).
 * Clone the `darknet_ros` repository (humble branch) into your workspace:
 ```
+cd ~/KV6022_limo_ros2/src
 git clone -b humble --recursive https://github.com/LCAS/darknet_ros.git
 ```
 * Install dependencies:
@@ -94,15 +95,16 @@ rosdep update; rosdep install --from-paths . -i -y
      ros__parameters:
         subscribers:
            camera_reading:
-              topic: /limo/depth_camera_link/image_raw
+              topic: /limo_camera/image
 ```
 * Build and source the package: 
 ```
+cd ~/KV6022_limo_ros2/
 colcon build --symlink-install
 source install/setup.bash
 ```
 Launch YOLO node:
 ```
- ros2 launch darknet_ros darknet_ros.launch
+ros2 launch darknet_ros darknet_ros.launch.py
 ```
 Refer to the [darknet_ros](https://github.com/leggedrobotics/darknet_ros) repository for further details on published object information.
