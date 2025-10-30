@@ -79,24 +79,43 @@ sudo apt-get install ros-humble-find-object-2d
 * To test detector robustness on scale and viewpoint changes, move the robot closer/farther or move the object to observe how detector reflects size changes. If detection drops, add another training view by repeating `Add object from scene` from a new viewpoint.
 
 ### Task 6: Object Detection : Deep Learning-based Approach
-For CNN-based object detection, we will use [YOLO](https://pjreddie.com/darknet/yolo/) which first introduced on its [original paper](https://pjreddie.com/media/files/papers/yolo_1.pdf).
-* Clone the `darknet_ros` repository (humble branch) into your workspace:
+For CNN-based object detection, we will use ROS 2 [package](https://github.com/mgonzs13/yolo_ros?tab=readme-ov-file) for YOLO models from [Ultralytics](https://github.com/ultralytics/ultralytics) to perform object detection and tracking which first introduced on its [original paper](https://pjreddie.com/media/files/papers/yolo_1.pdf).
+* Clone the `yolo_ros` repository into your workspace:
 ```
 cd ~/KV6022_limo_ros2/src
-git clone -b humble --recursive https://github.com/LCAS/darknet_ros.git
+git clone https://github.com/mgonzs13/yolo_ros.git
+pip3 install -r yolo_ros/requirements.txt
 ```
 * Install dependencies:
 ```
-rosdep update; rosdep install --from-paths . -i -y
+cd ~/ros2_ws
+rosdep install --from-paths src --ignore-src -r -y
 ```
-* Configure the correct image topic in `./darknet_ros/darknet_ros/config/ros.yaml` to use the correct image topic, e.g.:
-```
-  darknet_ros:
-     ros__parameters:
-        subscribers:
-           camera_reading:
-              topic: /limo_camera/image
-```
+* Configure the correct image topic in `./yolo_ros/yolo_bringup/launch/yolo.launch.py` to use the correct image topic and device to use, e.g.:
+<pre>
+...
+device = LaunchConfiguration("device")
+device_cmd = DeclareLaunchArgument(
+    "device",
+    #default_value="cuda:0",
+    <mark>default_value="cpu",</mark>
+    description="Device to use (GPU/CPU)",
+)
+....
+input_depth_topic = LaunchConfiguration("input_depth_topic")
+input_depth_topic_cmd = DeclareLaunchArgument(
+    "input_depth_topic",
+    <mark>default_value="/limo_camera/depth/image_raw",</mark>
+    description="Name of the input depth topic",
+)
+...
+input_depth_topic = LaunchConfiguration("input_depth_topic")
+input_depth_topic_cmd = DeclareLaunchArgument(
+    "input_depth_topic",
+    <mark>default_value="/limo_camera/depth/image_raw",</mark>
+    description="Name of the input depth topic",
+)
+</pre>
 * Build and source the package: 
 ```
 cd ~/KV6022_limo_ros2/
@@ -105,6 +124,8 @@ source install/setup.bash
 ```
 Launch YOLO node:
 ```
-ros2 launch darknet_ros darknet_ros.launch.py
+ros2 launch yolo_bringup yolo.launch.py
 ```
-Refer to the [darknet_ros](https://github.com/leggedrobotics/darknet_ros) repository for further details on published object information.
+<img width="400" height="400" class="center" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/yolo_result.png" />
+
+Refer to the [yolo_ros](https://github.com/mgonzs13/yolo_ros) repository for further details on published object information (`ros2 topic echo /yolo/detections`).
