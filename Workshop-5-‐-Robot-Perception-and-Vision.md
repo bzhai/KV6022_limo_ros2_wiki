@@ -67,10 +67,11 @@ sudo apt-get install ros-humble-find-object-2d
    
 <img width="800" height="300" class="center" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/find_object.png" />
 
-*  Then click `Edit` → `Add object from scene`. Drag a rectangle tightly around the object to indicate the object's binding box and confirm (Enter/OK). This creates Object #N in the database.
-* (Optional) `File` → `Save objects to a directory` (so you can reuse later in headless mode). 
+*  Then click `Edit` → `Add object from scene`. Click `Take picture` and drag a rectangle tightly around the object to indicate the object's binding box and confirm by clicking `Next` and `End`. This creates Object #N in the database.
+* (Optional) `File` → `Save objects` (so you can reuse later in headless mode). 
 
 `ros2 run find_object_2d find_object_2d --ros-args -r image:=/limo_camera/image -p objects_path:=[path_to_your_objects] -p gui:=false`
+* `[path_to_your_objects]` is directory where you save your objects
 * You should immediately see green boxes and keypoints when the object is recognized in subsequent frames.
 * Inspect detections in the `objects` topic `ros2 topic echo /objects` (see [find_object_2d](http://wiki.ros.org/find_object_2d)) and see if you can find the size and location of the object. You will see lines like `id` `x` `y` `w` `h` `...` (and in /objectsStamped, the same info with header/time). These give you the approximate location and size in image pixels. 
 
@@ -84,7 +85,7 @@ For CNN-based object detection, we will use ROS 2 [package](https://github.com/m
 ```
 cd ~/KV6022_limo_ros2/src
 git clone https://github.com/mgonzs13/yolo_ros.git
-pip3 install -r yolo_ros/requirements.txt
+sudo pip3 install -r yolo_ros/requirements.txt
 ```
 * Install dependencies:
 ```
@@ -102,11 +103,11 @@ device_cmd = DeclareLaunchArgument(
     description="Device to use (GPU/CPU)",
 )
 ....
-input_depth_topic = LaunchConfiguration("input_depth_topic")
-input_depth_topic_cmd = DeclareLaunchArgument(
-    "input_depth_topic",
-    <mark>default_value="/limo_camera/depth/image_raw",</mark>
-    description="Name of the input depth topic",
+input_image_topic = LaunchConfiguration("input_image_topic")
+input_image_topic_cmd = DeclareLaunchArgument(
+    "input_image_topic",
+    <mark>default_value="/limo_camera/image",</mark>
+    description="Name of the input image topic",
 )
 ...
 input_depth_topic = LaunchConfiguration("input_depth_topic")
@@ -126,6 +127,10 @@ Launch YOLO node:
 ```
 ros2 launch yolo_bringup yolo.launch.py
 ```
+For visualising YOLO detections in RViz2, open RViz2, set Fixed Frame → odom. Add by topic → select `/yolo/dbg_image` to see detected objects with labels. You can also run `ros2 topic echo /yolo/detections` to see the published detection messages.
+
+<img width="300" height="400" class="center" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/rviz_yolo.png" />
+
 <img width="400" height="400" class="center" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/yolo_result.png" />
 
-Refer to the [yolo_ros](https://github.com/mgonzs13/yolo_ros) repository for further details on published object information (`ros2 topic echo /yolo/detections`).
+Refer to the [yolo_ros](https://github.com/mgonzs13/yolo_ros) repository for further details on published object information `/yolo/detections`.
