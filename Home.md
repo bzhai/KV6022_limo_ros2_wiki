@@ -6,7 +6,11 @@
 * [Workshop 5 ‐ Robot Perception and Vision](https://github.com/kivrakh/KV6022_limo_ros2/wiki/Workshop-5-%E2%80%90-Robot-Perception-and-Vision)
 * Workshop 6 ‐ Enhancement Week
 * [Workshop 7 ‐ Kalman Filter Localization](https://github.com/kivrakh/KV6022_limo_ros2/wiki/Workshop-7-%E2%80%90-Kalman-Filter-Localization) 
-
+* 
+*
+*
+*
+* [Workshop 12 ‐ Assessment Setup and Support](https://github.com/kivrakh/KV6022_limo_ros2/wiki/Workshop-12-%E2%80%90-Assessment-Setup-and-Support) 
 
 ***
 
