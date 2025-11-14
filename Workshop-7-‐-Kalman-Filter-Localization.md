@@ -1,5 +1,5 @@
 ### Overview
-In this lab, you will gain practical experience using an Extended Kalman Filter (EKF) for robot localization with the `robot_localization` package. By completing this workshop, you will experiment with fusing noisy wheel encoder odometry data, laser and IMU sensor data and observing how sensor fusion can improve localization accuracy in scenarios involving wheel slip, turns, obstacle collision and other disturbances.
+In this lab, you will gain practical experience using an Extended Kalman Filter (EKF) for robot localization with the `robot_localization` package. By completing this workshop, you will experiment with fusing noisy wheel encoder odometry data, laser and IMU sensor data and observing how sensor fusion can improve position tracking accuracy in scenarios involving wheel slip, turns, obstacle collision and other disturbances.
 
 ### Preparation 1: Setting wheel encoder sensor
 You need modify the LIMO robot gazebo configuration to use wheel encoder odometry as the source for odometry information.
@@ -32,7 +32,7 @@ You need modify the LIMO robot gazebo configuration to use wheel encoder odometr
     &lt;/plugin&gt;
 &lt;/gazebo&gt;
 </pre>
-* Also, copy paste the following contents of `libgazebo_ros_p3d.so` plugin just after previous plugin to get the robot's actual (ground truth) position to compare the EKF estimation. This way,the ground truth position will be published to `odom/perfect`
+* Also, copy paste the following contents of `libgazebo_ros_p3d.so` plugin just after previous plugin to get the robot's actual (ground truth) position to compare the EKF estimation. This way,the ground truth position will be published to `odom/perfect` topic.
 <pre>
 &lt;gazebo&gt;
     &lt;plugin name="limo_diff_drive_perfect" filename=<mark>"libgazebo_ros_p3d.so"</mark>&gt;
@@ -61,7 +61,7 @@ ros2 topic echo /odom/wheel --field pose.pose.position
 <img width="800" height="400" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/wheel_odom_verify.png" />
 </p>
 
-### Preparation 2: Adding noise to the wheel odometry model
+### Preparation 2: Adding noise to sensor measurements (wheel odometry, imu)
 * You will add noise to the odometry data to better reflect real-world scenario as Gazebo provides near-perfect sensory model. Review [noisy_odometry.py](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/example_codes/noisy_odometry.py) node which will add gaussion noise to odometry motion model similar to reflect below uncertainty in motion model explained [here](https://blog.lxsang.me/post/id/16).
  
 <p align="center">
@@ -78,6 +78,7 @@ cd ~/KV6022_limo_ros2/src
 git clone https://github.com/AlexKaravaev/ros2_laser_scan_matcher.git
 git clone https://github.com/AlexKaravaev/csm.git
 ```
+* Build and source the workspace
 * Run the node to publish `/odom/laser` topic via:
 ```
 ros2 run ros2_laser_scan_matcher laser_scan_matcher --ros-args -p publish_odom:=/odom/laser -p publish_tf:=false -p laser_frame:=laser_link
@@ -85,7 +86,7 @@ ros2 run ros2_laser_scan_matcher laser_scan_matcher --ros-args -p publish_odom:=
 * Verify the laser odometry is being published `ros2 topic echo /odom/laser --field pose.pose.position`
 
 ### Task1: Setting up Sensor Fusion Package (`robot_localization`)
-We have odometry estimation coming from wheel encoders, imu and laser sensor. These sources will be combined through EKF algorithm to achieve better odometry and hence better localization. `robot_localization` [package](http://docs.ros.org/en/noetic/api/robot_localization/html/index.html) is the implementation of EKF which you will configure it to fuse noisy wheel odometry, IMU data and laser odometry for obtaining combined odometry.
+We have odometry estimation coming from wheel encoders, imu and laser sensor. These sources will be combined through EKF algorithm to achieve better odometry and hence better position tracking. `robot_localization` [package](http://docs.ros.org/en/noetic/api/robot_localization/html/index.html) is the implementation of EKF which you will configure it to fuse noisy wheel odometry, IMU data and laser odometry for obtaining combined odometry.
 * First of all, clone the `robot_localization` package repository (humble branch) into your `KV6022_limo_ros2` workspace:
 ```
 cd ~/KV6022_limo_ros2/src
@@ -244,5 +245,5 @@ The `rqt_robot_steering` window allows you to control the robot using a graphica
 <img width="900" height="400" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/ekf_plot.png" />
 </p>
 
-* Make turns and see how EKF filter corrects these discrepancies using fusion of IMU and encoder data to provide a more accurate position. 
+* Make turns and see how EKF filter corrects these discrepancies using fusion of IMU and encoder data to provide a more accurate position tracking. 
 * When the robot collides with an obstacle or experiences wheel slippage, notice how the noisy odometry data may become inaccurate also effects the filtered `/odom/combined` accuracy negatively.
