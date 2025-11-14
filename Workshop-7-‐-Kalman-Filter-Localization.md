@@ -1,8 +1,8 @@
 ### Overview
-In this lab, you will gain practical experience using an Extended Kalman Filter (EKF) for robot localization with the `robot_localization` package. By completing this workshop, you will experiment with fusing noisy wheel encoder odometry data, laser and IMU sensor data and observing how sensor fusion can improve position tracking accuracy in scenarios involving wheel slip, turns, obstacle collision and other disturbances.
+In this lab, you will gain practical experience using an Extended Kalman Filter (EKF) for robot localization (e.g., position tracking, navigation by odometry) with the `robot_localization` package. By completing this workshop, you will experiment with multi-sensor fusing of noisy wheel encoder odometry data, laser and IMU sensor data. By doing so, observing how sensor fusion can improve position tracking accuracy in scenarios involving wheel slip, turns, obstacle collision and other disturbances.
 
 ### Preparation 1: Setting wheel encoder sensor
-You need modify the LIMO robot gazebo configuration to use wheel encoder odometry as the source for odometry information.
+You need modify the LIMO robot gazebo configuration to use wheel encoder odometry as the source for odometry information to reflect the motion under noise.
 * Open the LIMO robot gazebo configuration file [limo_diff.gazebo](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/limo_description/urdf/limo_diff/limo_diff.gazebo). In the `libgazebo_ros_diff_drive.so` plugin set the `odometry_source` parameter to `0` to use odometry source using the wheel encoder sensor: 
 <pre>
 &lt;gazebo&gt;
