@@ -50,6 +50,14 @@ You need modify the LIMO robot gazebo configuration to use wheel encoder odometr
     &lt;/plugin&gt;
 &lt;/gazebo&gt;
 </pre>
+* To set the robot's initial pose (position and orientation) to zero, update the following parameters in [limo_gazebo_diff.launch.py](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/limo_gazebosim/launch/limo_gazebo_diff.launch.py) 
+<pre>
+spawn_x_val = <mark>'0.0'</mark>
+spawn_y_val = <mark>'0.0'</mark>
+spawn_z_val = <mark>'0.0'</mark>
+spawn_yaw_val = <mark>'0.0'</mark>
+</pre>
+
 * Build and source your workspace
 * Launch the Gazebo simulation
 * Verify the wheel encoder odometry is in  place. Move robot in forward towards to the wall, that is we expect increasing its `x` value. Observe that even robot is not moving due to the collosion to the wall, `x` position of the robot keep increasing due to fact that robot is considering it is moving forward according wheels turns.
@@ -115,6 +123,12 @@ ekf_filter_node:
         base_link_frame: base_link
         world_frame: odom
         predict_to_current_time: true
+
+        initial_state: [<mark>0.0</mark>,  <mark>0.0</mark>,  0.0,
+                        0.0,  0.0,  <mark>0.0</mark>,
+                        0.0,  0.0,  0.0,
+                        0.0,  0.0,  0.0,
+                        0.0,  0.0,  0.0]
 
         odom0: /odom/wheel/noisy
         odom0_config: [<mark>true</mark>, <mark>true</mark>, false,
