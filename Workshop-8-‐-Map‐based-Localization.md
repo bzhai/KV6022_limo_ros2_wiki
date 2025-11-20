@@ -145,7 +145,7 @@ ros2 launch limo_gazebosim limo_gazebo_diff.launch.py
 ```
 3. In another terminal, start the localisation launch file:
 ```
-ros2 launch KV6022_assessment limo_localisation.launch.py
+ros2 launch limo_localisation limo_localisation.launch.py
 ```
 4. Start `rviz2`. In RViz:
  add the following visualisation: `ParticeCloud`. Don't forget to change:
