@@ -101,7 +101,7 @@ sudo apt install ros-humble-navigation2
 ```
 * Build and source workspace again. Next, run the map server:
 ```
-ros2 launch limo_localisation map_server.launch.py
+ros2 launch limo_localisation limo_map_server.launch.py
 ```
 * In another terminal, confirm that the `/map` topic is listed `ros2 topic list`. You could echo this to the terminal `ros2 topic echo /map`, but a list of 1, 0, -1 (obstacle, freespace, unknown) is not very helpful! Instead, let us use RViz to see the map. 
 * Start RViz2  `rviz2`. 
