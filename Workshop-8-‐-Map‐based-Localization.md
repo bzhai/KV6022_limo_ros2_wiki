@@ -14,7 +14,7 @@ cd ~/KV6022_limo_ros2/src/
 ```
 * Use the `ros2 pkg create` command to generate the package skeleton. You must specify the build type `ament_python` for Python and any dependencies. For a Python Package:
 ```
-# Replace 'my_ros2_package' with your chosen package name (e.g., `limo_localisaton`)
+# Replace 'my_ros2_package' with your chosen package name (e.g., `limo_localisation`)
 ros2 pkg create --build-type ament_python my_ros2_package --dependencies rclpy
 ```
 * Inside this new package, create launch, maps, and params folders for the associated files that will be stored and used. Your package structure should look similar to:
