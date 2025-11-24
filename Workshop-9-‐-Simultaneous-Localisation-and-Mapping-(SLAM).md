@@ -179,6 +179,13 @@ limo_localisation/
     ├── map.pgm
     └── map.yaml
 ```
+
+A very helpful tool that comes with `slam_toolbox` is the RViz plugin (Panels->Add New Panel->slam_toolbox->SlamToolboxPlugin). There's exposed buttons for the save, serialization and deserialization services to load an old map (pose-graph) to update and refine, or continue mapping. Alternatively, you can use the plugin for saving your maps.
+
+<p align="center">
+<img width="557" height="429" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/rviz_plugin.png" />
+</p>
+
 ### Task 3: Changing the `slam_toolbox` parameters:
 
 `slam_toolbox` node parameters are set by passing parameters to the node in the launch file via a `slam.yaml` file. 
