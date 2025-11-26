@@ -8,7 +8,7 @@
 * [Workshop 7 ‐ Kalman Filter Localization](https://github.com/kivrakh/KV6022_limo_ros2/wiki/Workshop-7-%E2%80%90-Kalman-Filter-Localization) 
 * [Workshop 8 ‐ Map‐based Localization](https://github.com/kivrakh/KV6022_limo_ros2/wiki/Workshop-8-%E2%80%90-Map%E2%80%90based-Localization)
 * [Workshop 9 ‐ Simultaneous Localisation and Mapping (SLAM)](https://github.com/kivrakh/KV6022_limo_ros2/wiki/Workshop-9-%E2%80%90-Simultaneous-Localisation-and-Mapping-(SLAM))
-*
+* [Workshop 10 ‐ Autonomous Navigation](https://github.com/kivrakh/KV6022_limo_ros2/wiki/Workshop-10-%E2%80%90-Autonomous-Navigation)
 *
 * [Workshop 12 ‐ Assessment Setup and Support](https://github.com/kivrakh/KV6022_limo_ros2/wiki/Workshop-12-%E2%80%90-Assessment-Setup-and-Support) 
 
