@@ -104,7 +104,7 @@ def generate_launch_description():
     return ld
 ```
 
-Download [bt_nav.yaml]() file (configuration for behaviour tree navigator) into the `params` directory. Then check everything builds as per usual.
+Download [bt_nav.yaml](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/params/bt_nav.yaml) file (configuration for behaviour tree navigator) into the `params` directory. Then check everything builds as per usual.
 
 ```
 colcon build
@@ -485,8 +485,8 @@ controller_server:
       robot_base_frame: base_link
       use_sim_time: True
       rolling_window: True
-      width: 3
-      height: 3
+      width: 2
+      height: 2
       resolution: 0.05
       robot_radius: 0.175
       plugins: ["obstacle_layer", "inflation_layer"]
