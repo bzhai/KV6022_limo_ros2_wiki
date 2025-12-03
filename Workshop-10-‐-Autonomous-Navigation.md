@@ -314,7 +314,7 @@ In a new terminal, run
 ros2 launch limo_navigation limo_navigation.launch.py 
 ```
 
-If everything is running correctly, in `rviz` it should be possible to view the global costmap topic (`/global_costmap/costmap`) similar to the image below. Note that the specific colour palette comes from selecting `costmap` as the `Color Scheme`.
+If everything is running correctly, in `rviz` it should be possible to view the global costmap topic (`/global_costmap/costmap`) similar to the image below. Note that the specific colour palette comes from selecting `costmap` as the `Color Scheme`. Notice how obstacles got inflated by a safety area which is not traversable by the robot. You can read more about it [here](http://wiki.ros.org/costmap_2d).
 
 <p align="center">
 <img width="771" height="536" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/rviz_costmap.png" />
