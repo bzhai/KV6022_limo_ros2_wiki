@@ -309,11 +309,15 @@ In a new terminal, run localisation and map_server nodes
 ```
 ros2 launch limo_navigation limo_localisation.launch.py 
 ```
-In a new terminal, run 
+In a new terminal, run Rviz visualisation
+```
+rviz2
+```
+AMCL needs an initial guess so use `2D Pose Estimate` button on Rviz to set approximately where the robot is.
+In a new terminal, run
 ```
 ros2 launch limo_navigation limo_navigation.launch.py 
 ```
-
 If everything is running correctly, in `rviz` it should be possible to view the global costmap topic (`/global_costmap/costmap`) similar to the image below. Note that the specific colour palette comes from selecting `costmap` as the `Color Scheme`. Notice how obstacles got inflated by a safety area which is not traversable by the robot. You can read more about it [here](http://wiki.ros.org/costmap_2d).
 
 <p align="center">
