@@ -621,7 +621,7 @@ ros2 launch limo_gazebosim limo_gazebo_diff.launch.py
 
 * Start AMCL localization in the given map
 ```
-ros2 launch limo_localisation limo_localisation.launch.py
+ros2 launch limo_navigation limo_localisation.launch.py 
 ```
 
 * And the navigation stack:
