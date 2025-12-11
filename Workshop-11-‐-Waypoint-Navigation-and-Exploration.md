@@ -126,7 +126,6 @@ bt_navigator:
     # They can be set here or via a RewrittenYaml remap from a parent launch file to Nav2.
     default_bt_xml_filename: "nav2_bt_navigator/nav_to_pose_with_consistent_replanning_and_if_path_becomes_invalid.xml"
 
-
 behavior_server:
   ros__parameters:
     costmap_topic: local_costmap/costmap_raw
@@ -184,12 +183,14 @@ rviz2
 <p align="center">
 <img width="660" height="220" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/nav2_goal.png" />
 </p>
-* Then switch Nav2 into Waypoint Following Mode via the Nav2 panel: 
+
+* Then switch Nav2 into Waypoint Following Mode via the `Navigation 2 panel`. This helpful Rviz tool that comes with `nav2` package (Panels->Add New Panel->nav2_rviz_plugins->Navigation2). 
+
 <p align="center">
 <img width="660" height="500" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/waypoint_mode.png" />
 </p>
 
-*To visualise waypoints, add a `MarkerArray` display in Rviz
+* To visualise waypoints, add a `MarkerArray` display in Rviz
    * Add → By topic → select `/waypoints` as a `MarkerArray` display
 
 <p align="center">
