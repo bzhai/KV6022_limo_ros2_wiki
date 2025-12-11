@@ -39,3 +39,17 @@ ros2 run KV6022_assessment example_opencv_detector
 ```
 ros2 run KV6022_assessment example_waypoint_follower
 ```
+
+###  Notes on Navigation
+
+* In case the robot has difficulties in navigating from waypoint to waypoint in case they are too close to obstacles, remember:
+1. Check localisation quality: you will need a good position estimate (localisation) of the robot within the given map. If uncertainty is high, use `2D Pose Estimate` in RViz and teleoperate the robot a bit to allow localisation to converge.
+2. Tune navigation and costmaps parameters:
+Parameters you might adjust:
+   * Behaviour profile (aggressive vs cautious):
+        * `max_vel_x`, `max_vel_theta`, acceleration limits
+   * Safety margins:
+        * `robot_radius` (robot footprint)
+        * `inflation_radius` (safety bubble around obstacles)
+   * Offline changes: Edit [planner.yaml](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/params/planner.yaml) and/or [controller.yaml](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/params/controller.yaml). Increase or decrease costmap inflation radius so the robot does not get too close to walls or obstacles. Changes take effect next time you build. source and launch Nav2.
+   * Online changes (dynamic reconfigure): Alternatively, dynamically reconfigure on the fly by opening `ros2 run rqt_gui rqt_gui` or by simply typing `rqt` from the console and then from the menu bar `Plugins/Configuration/Dynamic Reconfigure`. Please select `planner_server`, `local_planner`, `global_costamp` or `local_costamp` in the menu on the left, and and adjust parameters interactively.
