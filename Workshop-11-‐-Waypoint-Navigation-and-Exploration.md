@@ -33,7 +33,6 @@ def generate_launch_description():
         'planner_server',
         'behaviour_server',
         'bt_navigator',
-        <mark>'waypoint_follower',</mark>
     ]
 
     # LOAD PARAMETERS FROM YAML FILES
