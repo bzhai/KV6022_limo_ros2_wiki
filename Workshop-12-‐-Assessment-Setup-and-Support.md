@@ -81,7 +81,7 @@ The example node [object_localisation.py](https://github.com/kivrakh/KV6022_limo
 > * `tf2.ExtrapolationException: Lookup would require extrapolation at time 1498.045000, but only time 1498.929000 is in the buffer, when looking up transform from frame [depth_link] to frame [map]`
 
 
-### Object counting in 3D
+### Object counting
 
 The example [object_counter.py](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/example_codes/object_counter.py) demonstrates how to count the detected objects in global coordinates with a simple filter preventing double counting. The node subscribes to `object_location` topic and keeps track of all detected objects. The new detection is first checked for its distance to all counted objects so far and if it is detected close to the existing object (distance below `detection_threshold`), then it is ignored. This allows the robot to detect the objects from multiple viewpoints without registering multiple counts.
    * To see how the counter works, launch the simulator.
