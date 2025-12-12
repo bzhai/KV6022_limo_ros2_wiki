@@ -1,5 +1,12 @@
-### Autonomous Road Inspection Challenge
+
+### 🚧 Autonomous Road Inspection Challenge
 The challenge theme is to build an autonomous mobile robot software system for a LIMO robot to survey driving area, detect, localise, and quantify road defects (e.g., potholes), and present results on a map.
+
+<p align="center">
+<img width="800" height="480" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/assessment.png" />
+</p>
+
+
 
 The repository contains a template ROS package called `KV6022_assessment` will act as a reference point for your developments. You will set it up in your own machine and develop the assignment solution there. The package contains the following items:
    * Navigation parameter file in (`/params/nav2_params.yaml`) 
@@ -13,29 +20,39 @@ These examples are a good starting point for your assessment. You may choose whe
 ```
 sudo apt install ros-humble-navigation2 ros-humble-nav2-bringup ros-humble-tf-transformations
 ```
-2. Set up an alternative DDS (Cyclone DDS or Zenoh). Due to some issues with `Fast DDS` and Navigation in ROS2, it has been recommended to use [Cyclone DDS](https://docs.ros.org/en/humble/Installation/RMW-Implementations/DDS-Implementations/Working-with-Eclipse-CycloneDDS.html) or [Zenoh](https://docs.ros.org/en/humble/Installation/RMW-Implementations/Non-DDS-Implementations/Working-with-Zenoh.html) instead. Install one of the following:
-    * Cyclone DDS: `sudo apt install ros-humble-rmw-cyclonedds-cpp`
-    * Zenoh: `sudo apt install ros-humble-rmw-zenoh-cpp`
-3. Configure ROS 2 to use the chosen DDS. You need to set the `RMW_IMPLEMENTATION` environment variable in your `.bashrc` file. 
-    * For switching to Cyclone DDS: `echo export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp >> ~/.bashrc`
-    * For Zenoh: `echo export RMW_IMPLEMENTATION=rmw_zenoh_cpp >> ~/.bashrc`
+> [!WARNING]
+> **DDS / RMW choice for Nav2**
+>
+> By default, ROS 2 on Humble typically uses **Fast DDS** as the middleware
+> (RMW implementation). In many cases this works fine, but it is known that
+> Fast DDS can sometimes cause issues with **Nav2** 
+>
+> If you see missing /map, /tf, costmap topics, or Nav2 nodes not reacting, consider switching to [Cyclone DDS](https://docs.ros.org/en/humble/Installation/RMW-Implementations/DDS-Implementations/Working-with-Eclipse-CycloneDDS.html) or [Zenoh](https://docs.ros.org/en/humble/Installation/RMW-Implementations/Non-DDS-Implementations/Working-with-Zenoh.html).  
+> Install one of the following:
+>    * Cyclone DDS: `sudo apt install ros-humble-rmw-cyclonedds-cpp`
+>    * Zenoh: `sudo apt install ros-humble-rmw-zenoh-cpp`
+>
+> Configure ROS 2 to use the chosen DDS. You need to set the `RMW_IMPLEMENTATION` environment variable in your `.bashrc` file. 
+>    * For switching to Cyclone DDS: `echo export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp >> ~/.bashrc`
+>    * For Zenoh: `echo export RMW_IMPLEMENTATION=rmw_zenoh_cpp >> ~/.bashrc`
+>
+> After editing `.bashrc`, close the terminal and open up a new one. When you build and source the package,
+>    * If using `Cyclone DDS`, proceed directly to running the simulation.
+>    * Else using `Zenoh`, start the Zenoh router in a separate terminal: `ros2 run rmw_zenoh_cpp rmw_zenohd`
 
-After editing `.bashrc`, close the terminal and open up a new one. When you build and source the package,
-* If using `Cyclone DDS`, proceed directly to running the simulation.
-* Else using `Zenoh`, start the Zenoh router in a separate terminal: `ros2 run rmw_zenoh_cpp rmw_zenohd`
-4. Run the simulation: 
+2. Run the simulation: 
 ```
 ros2 launch limo_gazebosim limo_gazebo_assessment.launch.py
 ```
-5. Run the navigation node (high-resolution maps with adjusted parameters)
+3. Run the navigation node (high-resolution maps with adjusted parameters)
 ```
 ros2 launch KV6022_assessment limo_navigation.launch.py
 ```
-6. Run the object detector node: 
+4. Run the object detector node: 
 ```
 ros2 run KV6022_assessment example_opencv_detector
 ```
-7. Run the waypoint follower node: 
+5. Run the waypoint follower node: 
 ```
 ros2 run KV6022_assessment example_waypoint_follower
 ```
