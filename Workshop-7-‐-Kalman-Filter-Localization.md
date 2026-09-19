@@ -58,7 +58,11 @@ spawn_z_val = <mark>'0.0'</mark>
 spawn_yaw_val = <mark>'0.0'</mark>
 </pre>
 
-* Build and source your workspace
+* Build and source your workspace 
+```
+colcon build
+source install/setup.bash
+```
 * Launch the Gazebo simulation
 * Verify the wheel encoder odometry is in  place. Move robot in forward towards to the wall, that is we expect increasing its `x` value. Observe that even robot is not moving due to the collosion to the wall, `x` position of the robot keep increasing due to fact that robot is considering it is moving forward according wheels turns.
 

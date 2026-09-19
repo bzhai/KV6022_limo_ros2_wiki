@@ -103,4 +103,27 @@ ROBOT HERE`. You will need to make use of the variables calculated above that po
    * $\beta$: goal orientation error
 * Compute $\rho$, $\alpha$, $\beta$ using odometry and waypoint transform.
 * Experiment with different $K_{\rho}$, $K_{\alpha}$, $K_{\beta}$ gains for smooth approaches the reference distance and orientation.
+
 * Repeat the experiment with `route1`, `route2`, `route3` using `dor` mode
+
+> [!TIP]
+> Start each component in its own terminal, in the order below.
+>
+> 1. Launch the Gazebo simulator:
+>    ```bash
+>    ros2 launch limo_gazebosim limo_gazebo_diff.launch.py
+>    ```
+> 2. Launch RViz to watch the robot and the waypoint markers:
+>    ```bash
+>    ros2 launch trajectory_skeleton view_robot.launch.py
+>    ```
+> 3. Start the tracking controller before publishing any waypoints. This example selects the proportional controller (`p`) and the default `odom` and `base_link` frames:
+>    ```bash
+>    ros2 run trajectory_skeleton trajectory_tracking_controller --ros-args \
+>      -p controller:=p -p odom_frame:=odom -p base_frame:=base_link
+>    ```
+> 4. Publish the waypoints for the route and mode you want to test:
+>    ```bash
+>    ros2 run trajectory_referee trajectory_publisher route1 dis
+>    ```
+

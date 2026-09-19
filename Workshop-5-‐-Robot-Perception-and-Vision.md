@@ -84,12 +84,12 @@ For CNN-based object detection, we will use ROS 2 [package](https://github.com/m
 * Clone the `yolo_ros` repository into your workspace:
 ```
 cd ~/KV6022_limo_ros2/src
-git clone https://github.com/mgonzs13/yolo_ros.git
-sudo pip3 install -r yolo_ros/requirements.txt
+git clone --branch 4.6.1 https://github.com/mgonzs13/yolo_ros.git
+pip3 install -r yolo_ros/yolo_ros/requirements.txt
 ```
 * Install dependencies:
 ```
-cd ~/ros2_ws
+cd ~/KV6022_limo_ros2
 rosdep install --from-paths src --ignore-src -r -y
 ```
 * Configure the correct image topic in `./yolo_ros/yolo_bringup/launch/yolo.launch.py` to use the correct image topic and device to use, e.g.:
@@ -120,7 +120,8 @@ input_depth_topic_cmd = DeclareLaunchArgument(
 * Build and source the package: 
 ```
 cd ~/KV6022_limo_ros2/
-colcon build --symlink-install
+colcon build     --packages-select yolo_msgs yolo_ros yolo_bringup     --symlink-install     --event-handlers console_direct+
+
 source install/setup.bash
 ```
 Launch YOLO node:

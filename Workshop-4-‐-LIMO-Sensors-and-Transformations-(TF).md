@@ -9,6 +9,10 @@ The objectives of this workshop are
 ```
 git pull origin main
 ```
+* Create a new package for this week's workshop
+```
+ros2 pkg create Week4_lab --build-type ament_python --dependencies rclpy geometry_msgs 
+```
 * Build and Source the workspace
 * Open up the simulation environment and find out what type of sensor data they are and which topics they publish.
     * Hint: You should observe and echo
@@ -42,7 +46,7 @@ ranges:                          # length ~360
 <img src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/sensors.png" width="800">
 
 * Determine the maximum range at which the proximity sensors on your robot can detect an object. Is there also a minimum range or can objects be detected even if they are placed in direct contact with the sensor?
-   * Hint: Write a Python node to subscribe to the `/scan` topic and print the distance to the nearest and furthest obstacle in meters. You can make the robot move using keyboard teleop.
+   * Hint: Write a Python node in your ``Week4_lab`` package to subscribe to the `/scan` topic and print the distance to the nearest and furthest obstacle in meters. You can make the robot move using keyboard teleop.
 
 ### 2. TF tree and Publishing the closest point as a Marker
 * Display the tf tree of the LIMO robot (`ros2 run rqt_tf_tree rqt_tf_tree`) and understand what a frame is (ROS 2 tf2 [theoritical](https://docs.ros.org/en/humble/Concepts/Intermediate/About-Tf2.html) and [practical](https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Introduction-To-Tf2.html) introduction might help, as might this [paper](http://wiki.ros.org/Papers/TePRA2013_Foote?action=AttachFile&do=view&target=TePRA2013_Foote.pdf)) 
@@ -53,7 +57,28 @@ sudo apt update && sudo apt install ros-humble-rqt-tf-tree
 
 ![LIMO frames](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/frames.png)
 
-* Work out to display the position of the robot's laser (which frame does it have?) in global (`/odom`) coordinates you may either implement Python code following the [TranformListener example](https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Writing-A-Tf2-Listener-Py.html) or the given [tf_listener.py](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/example_codes/tf_listener.py), or figure out how to use a command-line tool: `ros2 run tf2_ros tf2_echo`
+* Work out to display the position of the robot's laser (which frame does it have?) in global (`/odom`) coordinates you may either implement Python code following the [TranformListener example](https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Writing-A-Tf2-Listener-Py.html) or the given [tf_listener.py](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/example_codes/tf_listener.py), or figure out how to use a command-line tool: `ros2 run tf2_ros tf2_echo`. 
+Here we give an exmaple based on the command-line tool:
+`ros2 run tf2_ros tf2_echo odom laser_link`. The first frame is the one you want the answer expressed in, the second is the thing whose pose you're asking about. That gives you the position and orientation of the laser frame in `/odom` coordinates, updated continuously (default 1 Hz). The robot or simulator has to be running, otherwise there's no tf data and it will just warn about the frames not existing.
+```
+ros2 topic echo /scan --field header.frame_id --once
+>laser_link  # the laser publishes in laser_link
+```
+The laser publishes in `laser_link`. Now you can ask tf2 for that frame's pose in `odom`:
+
+```bash
+ros2 run tf2_ros tf2_echo odom laser_link --ros-args -p use_sim_time:=true
+```
+
+* You should get a block once per second with translation, quaternion, and RPY. Expect z to sit at a small fixed value (the lidar's mounting height) and x to have a small constant offset from `base_link` — those constants are what distinguish the laser frame from the robot's base. To see it working, open a second terminal and drive the robot:
+
+```bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
+Watch x, y and yaw change as you move while z stays put. That's your ground truth for checking the Python `lookup_transform` version when you write it.
+
+---
+
 
 * TF lets you transform a point measured in one frame to another. Here, we take the closest laser point (in `laser_link`) and transform it into `odom`, then publish a marker in `odom` frame. In order to that you will complete the Python node provided and your code would go in part of the file [closest_lidar_point.py](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/example_codes/closest_lidar_point.py) where it says `START WRITING YOUR CODE HERE`. Some useful pointers:
 <img src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/laser_ranges.png" width="400">
@@ -61,8 +86,8 @@ sudo apt update && sudo apt install ros-humble-rqt-tf-tree
    * `LaserScan.ranges[i]` or the points in the [LaserScan](http://docs.ros.org/melodic/api/sensor_msgs/html/msg/LaserScan.html) message are stored in polar coordinates in a compressed way to save space. You'll need to loop through the ranges array, calculating the angle for that specific point using the equation:
 * `closest_angle = msg.angle_min + (index of closest_range * msg.angle_increment)`
 
- Next you can convert to `(x,y)` in the scan's frame using:
-* `x = closest_range * cos(closest_angle), 
+* Next you can convert to `(x,y)` in the scan's frame using:
+`x = closest_range * cos(closest_angle), 
    y = closest_range * sin(closest_angle),
    z= 0`
 

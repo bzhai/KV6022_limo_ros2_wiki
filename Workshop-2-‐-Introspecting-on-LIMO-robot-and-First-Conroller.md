@@ -14,6 +14,11 @@ The goal of this workshop is to make you familiar with the LIMO robot platform w
 ## 1. Get to know your LIMO ROS 2 nodes and topics 
 
 Launch the differential-drive LIMO in Gazebo and find out the following information using ROS 2 Command Line Interface (CLI):
+>```
+>cd ~/KV6022_limo_ros2
+>source install/setup.bash
+>ros2 launch limo_gazebosim limo_gazebo_diff.launch.py
+>```
 
 * How many topics and nodes does the LIMO robot have?
 * What topic is used to move the LIMO robot? (usually `/cmd_vel`) 
@@ -59,7 +64,16 @@ You can then select `File > Open Folder`. Navigate to your ROS 2 workspace (e.g.
 ## 4. Create a new ROS 2 package and Build
 A single workspace can contain as many packages as you want, each in its own folder. Best practice is to have a `src` folder within your workspace and to create your packages in there. Observe that under `KV6022_limo_ros2/src` workspace, there exist `limo_description`, `limo_gazebosim` and `limo_msgs` packages.
 
+```
+cd ~/KV6022_limo_ros2/src
+
+ros2 pkg create Week2_lab --build-type ament_python \
+  --dependencies rclpy geometry_msgs 
+
+```
+
 * So, navigate into `KV6022_limo_ros2/src` and decide on a name for your package and run the package creation command to keep all your work in it (e.g, `Week2_lab`) - you may want to follow the [official instructions](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Creating-Your-First-ROS2-Package.html).
+
 
 * Return to the root of your workspace (`KV6022_limo_ros2/`) and build the workspace that now has this empty package and others using `colcon build`.
 
@@ -67,7 +81,8 @@ A single workspace can contain as many packages as you want, each in its own fol
 >`colcon` will generate its output wherever it's run. Make sure you're in the workspace root before building.
 
 ## 5. Your first ROS controller (Creating a node with a publisher)
-You can control your LIMO robot autonomously by writing a small controller in Python that publishes velocity commands on a dedicated topic. To do so, you can modify the `publisher.py` script (seen during the demonstration) below to send robot control commands.
+You can control your LIMO robot autonomously by writing a small controller in Python that publishes velocity commands on a dedicated topic. To do so, you can creat the `command_publisher.py` script (seen during the demonstration) below to send robot control commands.
+You can use VS Code or Cursor to open the project folder to do it 
 
 To do so, remember you need to change the `topic` on which to publish from topic to `cmd_vel`, the published message from `String` to `geometry_msgs/msg/Twist` and correctly populate the message's fields.
 ```python
@@ -155,7 +170,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            <mark>'command_python_publisher = Week2_lab.command_publisher:main'</mark>
+            <mark>'command_publisher = Week2_lab.command_publisher:main'</mark>
         ],
     },
 )
@@ -173,7 +188,7 @@ ros2 run Week2_lab command_publisher
 > [!TIP] 
 > If ROS2 is unable to find the node, but it can find the package, then you can rely on `ros2 pkg executables`. For instance, you can run as >follows. If the command outputs nothing, this means that no nodes were found.
 >```
->ros2 pkg executables python_package
+>ros2 pkg executables Week2_lab
 >```
 >The command, at this stage, should output the following.
 >```
