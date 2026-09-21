@@ -126,16 +126,42 @@ Make sure:
 * `slam.yaml` is stored under your package's `params` folder.
 * `setup.py` installs `params` properly (you already did this in the localisation workshop).
 
+> **⚠️ Warning:**  
+>  
+> If you have completed **Week 7** and are now working on **Week 9**, you **must update the following setting** for proper SLAM operation:
+>
+> 1. Navigate to the directory:
+>    ```
+>    cd ~/KV6022_limo_ros2/src/limo_description/urdf/limo_diff
+>    ```
+> 2. Open the file `limo_diff.gazebo` and change:
+>    ```xml
+>    <publish_odom_tf>false</publish_odom_tf>
+>    ```
+>    to
+>    ```xml
+>    <publish_odom_tf>true</publish_odom_tf>
+>    ```
+>    Alternatively, you can run this command from your workspace root to update the file automatically:
+>    ```
+>    cd ~/KV6022_limo_ros2
+>    sed -i 's|<publish_odom_tf>false</publish_odom_tf>|<publish_odom_tf>true</publish_odom_tf>|' src/limo_description/urdf/limo_diff/limo_diff.gazebo
+>    ```
+
 Rebuild and source your workspace:
 ```
-colcon build
+cd ~/KV6022_limo_ros2
+rm -rf build/limo_localisation
+rm -rf install/limo_localisation
+colcon build --packages-select limo_localisation
+colcon build --packages-select limo_description 
 source install/setup.bash
 ```
 ### Task 1: Mapping
 We are ready to build a map of the environment using `slam_toolbox` while driving the robot around.
 * Launch the Gazebo simulator 
 ```
-ros2 launch limo_gazebosim limo_gazebo_diff.launch.py.
+ros2 launch limo_gazebosim limo_gazebo_diff.launch.py
 ```
 * Launch the slam toolbox
 ```
@@ -163,7 +189,7 @@ ros2 launch limo_localisation limo_slam.launch.py
    * Large pure rotations on the spot
 
 can lead to distorted or inconsistent maps (poor SLAM performance)
-* In this way, a occupancy map was created, where white points indicate free space, black points are a wall or other obstacle, and transparently marked places not yet visited. 
+* In this way, an occupancy map was created, where white points indicate free space, black points are a wall or other obstacle, and transparently marked places not yet visited. 
 
 ### Task 2: Saving the map
 * The `/map` topic is available till node is running, when you close your node you will lose all your explored map. To reuse the map (e.g. later for AMCL / Nav2), you need to save it using `nav2_map_server`.

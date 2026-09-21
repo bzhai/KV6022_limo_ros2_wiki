@@ -74,8 +74,22 @@ setup(
 colcon build
 source install/setup.bash
 ```
+>[!TIP]
+> If you don't want to build all the packages please use:
+> ```
+>colcon build --symlink-install --packages-select robot_localization
+>source install/setup.bash
+> ```
 ### Preparation 2: Occupancy grid map representation
 Maps used for ROS are stored as `.pgm` image files, with an accompanying `.yaml` file. Below is an example of the `.yaml` file for the [map.pgm](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/maps/map.pgm) from the [driving area](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/maps/map.png) used in this workshop.
+
+> [!NOTE] 🗺️ About the `.pgm` file format
+> * 📛 **Name:** The full name of `.pgm` is **Portable Graymap**.
+> * 📦 **Family:** It is part of the **Netpbm** open-source graphics suite/format family.
+> * 🤖 **Why ROS uses it:** It is a simple, *uncompressed* grayscale image format where each pixel directly represents an occupancy probability:
+>   * ⬛ **black** → obstacle
+>   * ⬜ **white** → free space
+>   * 🔘 **gray** → unknown area
 <pre>
 image: map.pgm
 mode: trinary
@@ -99,7 +113,14 @@ Inspect and modify it so to load the correct map. In particular:
 ```
 sudo apt install ros-humble-navigation2
 ```
-* Build and source workspace again. Next, run the map server:
+* Build and source workspace again. 
+```
+cd ~/KV6022_limo_ros2
+colcon build --packages-select limo_localisation --symlink-install
+source ~/KV6022_limo_ros2/install/setup.bash
+
+```
+* Next, run the map server:
 ```
 ros2 launch limo_localisation limo_map_server.launch.py
 ```
@@ -143,7 +164,7 @@ sudo apt install ros-humble-nav2-rviz-plugins
 ```
 ros2 launch limo_gazebosim limo_gazebo_diff.launch.py
 ```
-3. In another terminal, start the localisation launch file:
+3. In another terminal, rebuild this `limo_localisation` package (see [Preparation 3](#preparation-3-publishing-a-map-with-ros) for the build and source commands), then start the localisation launch file:
 ```
 ros2 launch limo_localisation limo_localisation.launch.py
 ```
@@ -155,7 +176,7 @@ ros2 launch limo_localisation limo_localisation.launch.py
    * Set `Min Arrow` Length to `0.1` so the particles are visible
    * Under Topic → `History Policy`, choose `Keep All`
    * Under Topic → `Reliability Policy`, choose `Best Effort`
-* Add a `PoseWithCovariance` display by topic to visualise the estimated pose and covariance.
+* Add a `PoseWithCovariance` display by topic `amcl_pose` to visualise the estimated pose and covariance.
 * Add a `scan` by topic to visualise current laser measurements.
 5.  Once everything has loaded, you may notice the robot at (`0, 0`) but do not notice the particle cloud. This is because AMCL needs an initial guess, published on the `/initialpose` topic. RViz can publish to this for you using `2D Pose Estimate` button this allows us to put a large green arrow down approximately where the robot is, and set the orientation:
 * Click `2D Pose Estimate`, then click and drag on the map:

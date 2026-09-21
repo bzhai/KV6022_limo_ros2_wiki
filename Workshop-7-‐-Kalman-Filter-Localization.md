@@ -192,11 +192,13 @@ def generate_launch_description():
 ```
 colcon build
 source install/setup.bash
-```
-```
+ros2 launch limo_gazebosim limo_gazebo_diff.launch.py
+ros2 run Week7_lab noisy_odometry
+ros2 run ros2_laser_scan_matcher laser_scan_matcher --ros-args -p publish_odom:=/odom/laser -p publish_tf:=false -p laser_frame:=laser_link
+
 ros2 launch robot_localization ekf.launch.py
 ```
-* Verify that the `/odometry/combined` topic is being published: `ros2 topic list` and `ros2 topic echo /odometry/combined --field pose.pose.position`
+* Verify that the `/odom/combined` topic is being published: `ros2 topic list` and `ros2 topic echo /odom/combined --field pose.pose.position`
 * Visualize the ROS graph using to check whether EKF node subscribes expected topics.
 ```
 ros2 run rqt_graph rqt_graph
