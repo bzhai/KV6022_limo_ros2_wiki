@@ -107,7 +107,7 @@ def generate_launch_description():
 Download [bt_nav.yaml](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/params/bt_nav.yaml) file (configuration for behaviour tree navigator) into the `params` directory. Then check everything builds as per usual.
 
 ```
-colcon build
+colcon build --packages-select limo_navigation
 source install/setup.bash
 ```
 
@@ -298,6 +298,12 @@ def generate_launch_description():
 
 * Download the [map.yaml](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/maps/map.yaml) and [map.pgm](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/maps/map.pgm) and place them under your package's `maps` folder
 * Download [limo_localisation.launch.py](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/launch/limo_localisation.launch.py) into `limo_navigation/launch/` and update `pkg_name` inside to `limo_navigation`.
+* find this line of code: `amcl_config = os.path.join(get_package_share_directory(pkg_name),'params','amcl.yaml')` add the following code below it to make the AMCL to use simulation time clock
+```
+with open(amcl_config, encoding='utf-8') as config_file:
+    amcl_parameters = yaml.safe_load(config_file)['amcl']['ros__parameters']
+amcl_parameters['use_sim_time'] = True
+```
 
 * Perform the usual `colcon build` and `source install/setup.bash`.
 
@@ -690,7 +696,10 @@ To visualize the `Nav2` stack in RVIZ, set `Global Frame` to map and include fol
 
 ### Task 4.2: Send a Goal Using Visual Tools
 
-To send the robot to a goal we need to provide a goal to the `/navigation_to_pose` action server. An autonomous algorithm/agent would publish goal messages directly to the action server. We would select a point on the map in Rviz, along the top bar there is a button called `2D Goal Pose` or `Nav 2 Goal`. Try this out with the steps below.
+To send the robot to a goal we need to provide a goal to the `/navigation_to_pose` action server. An autonomous algorithm/agent would publish goal messages directly to the action server. We would select a point on the map in Rviz, along the top bar there is a button called `2D Goal Pose` or `Nav 2 Goal`. Try this out with the steps below. If you can't find it, please do the following steps:
+* Click the blue + on the top toolbar, beside “Publish Point.” This is different from the bottom-left Add button.
+* Expand nav2_rviz_plugins, select GoalTool, and click OK. “Nav2 Goal” should appear.
+* Also select Panels → Add New Panel → nav2_rviz_plugins → Navigation 2.
 
 * Press the `2D Goal Pose` or `Nav 2 Goal` button to enable the tool
 * Hover over a specific point in the map you wish to navigate to
@@ -698,6 +707,7 @@ To send the robot to a goal we need to provide a goal to the `/navigation_to_pos
 * Drag your mouse around to change the direction of the arrows
 * Release the left mouse button
 
+Once navigation is active, click Nav2 Goal, then click-and-drag on a clear part of the map. Save your configuration with File → Save Config As so these controls are available next time.
 The base of the arrow indicates the pose position, whereas the arrow indicates the pose orientation. Once you release the left mouse button, the goal is sent.
 
 The robot should be driving to where your arrow was, whilst publishing the global path and the trajectory the controller is attempting to take.

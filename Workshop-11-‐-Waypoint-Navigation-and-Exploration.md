@@ -179,30 +179,35 @@ ros2 launch limo_navigation limo_navigation.launch.py
 ```
 rviz2
 ```
-* Make sure that the `Nav2 Goal` toolbar is added or visible at the top of RViz. If not, we can add it under the `+` sign. 
+* Make sure that the **Nav2 Goal** toolbar is added or visible at the top of RViz. If not, we can add it under the `+` sign. 
 <p align="center">
 <img width="660" height="220" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/nav2_goal.png" />
 </p>
 
-* Then switch Nav2 into Waypoint Following Mode via the `Navigation 2 panel`. This helpful Rviz tool that comes with `nav2` package (Panels->Add New Panel->nav2_rviz_plugins->Navigation2). 
+* For the map, please make sure the topic is **/global_costmap/costmap** and also the **Color Scheme** should be `costmap`
+* Please also add **PoseWithCovariance** to the **Display** panel. Then, click **2D Pose Estimate** and draw an arrow in the robot’s heading direction to estimate its initial pose.
+
+* Then switch Nav2 into Waypoint Following Mode via the **Navigation 2 panel**. This helpful Rviz tool that comes with **nav2** package (Panels->Add New Panel->nav2_rviz_plugins->Navigation2). 
 
 <p align="center">
 <img width="660" height="500" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/waypoint_mode.png" />
 </p>
 
-* To visualise waypoints, add a `MarkerArray` display in Rviz
-   * Add → By topic → select `/waypoints` as a `MarkerArray` display
+* To visualise waypoints, add a `MarkerArray` display in Rviz by Add → By topic → select `/waypoints` as a `MarkerArray` display. Then expand your MarkerArray display and check its topic is `/waypoints` and that the display is enabled.
+.
+
 
 <p align="center">
 <img width="400" height="600" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/waypoints_marker.png" />
 </p>
 
-* Using the `Nav2 Goal` or waypoint tool, click multiple locations on the map to define a list of waypoints: 
+* Using the `Nav2 Goal` in the top toolbar or waypoint tool,  Click and hold in a clear corridor, drag to set the robot’s desired heading, then release to define a list of waypoints: 
 
 <p align="center">
 <img width="600" height="600" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/waypoints_locations.png" />
 </p>
 
+* Once the markers appear, click Start Waypoint Following. This sends the route and starts robot movement.
 * And when we are done with the waypoints we can start the waypoint navigation via the Nav2 panel in Rviz by clicking `Start Waypoint Following` button. The robot should drive through each waypoint in order:  
 
 <p align="center">
@@ -249,19 +254,20 @@ git clone https://github.com/robo-friends/m-explore-ros2.git
 Build the workspace and source the setup.bash to make sure ROS is aware about the new package:
 ```
 cd ~/KV6022_limo_ros2
-colcon build
+colcon build --packages-up-to explore_lite multirobot_map_merge explore_lite_msgs
 source install/setup.bash
 ```
 
 ### Task 3.1 Configuration of explore node
-As in the previous cases, download [explore_lite parameter configuration](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/params/explore.yaml) file and add it to the `param` folder of your package. This file contains the following parameters:
-```yaml
+As in the previous cases, download [explore_lite parameter configuration](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/params/explore.yaml) file, update to the following parameters  and add it to the `param` folder of your package. This file contains the following parameters:
+
+<pre>
 /**:
   ros__parameters:
     robot_base_frame: base_link
     return_to_init: true
-    costmap_topic: map
-    costmap_updates_topic: map_updates
+    <mark>costmap_topic: map
+    costmap_updates_topic: map_updates</mark>
     visualize: true
     planner_frequency: 0.15
     progress_timeout: 30.0
@@ -270,7 +276,8 @@ As in the previous cases, download [explore_lite parameter configuration](https:
     gain_scale: 1.0
     transform_tolerance: 0.3
     min_frontier_size: 0.75
-```
+</pre>
+
 <details>
 <summary><b>Explanation of the parameters</b></summary>
 <ul>
