@@ -17,6 +17,7 @@ sudo apt install terminator
 * Open Terminator:
    * Click on the terminal icon from the startup
    * Choose to "Split Horizontally" or "Split Vertically" by right-clicking a terminal window to have multiple terminal windows
+   <img src="https://github.com/bzhai/KV6022_limo_ros2_wiki/blob/master/images/terminator_split.png?raw=true" width="1000">
 * Try to achieve three terminal windows (1x2, 2x2) that look like so
 <img src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/terminator.png" width="1000">
 
@@ -157,11 +158,24 @@ You should see Gazebo driving area world with the LIMO robot:
 
 # 5. Basic ROS 2 operations
 1. Inspect nodes & topics: Inspect the robot's nodes and topics by using the `ros2 node` and `ros2 topic` commands. When you type the command without any additional arguments, you should see all available options. Display and compare the format of the following topics `/odom`, `/scan`, `/tf` and `/depth_camera/color/image_raw`. You might also want to refer to the official [node](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Nodes/Understanding-ROS2-Nodes.html) and [topic](https://docs.ros.org/en/foxy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html) tutorials.
+```
+ros2 topic info /odom
+ros2 topic info /scan
+ros2 topic info /tf
+ros2 topic info /depth_camera/color/image_raw
 
+ros2 interface show nav_msgs/msg/Odometry
+ros2 interface show sensor_msgs/msg/LaserScan
+ros2 interface show tf2_msgs/msg/TFMessage
+ros2 interface show sensor_msgs/msg/Image
+```
 <!-- 2. Now, let us use the graphical visualiser [RVIZ](https://github.com/ros2/rviz) to look at the robot and its sensor topics. Start by typing rviz2 -d src/limo_description/rviz/model_sensors_real.rviz which uses a pre-defined configuration file, and you should see the interface with a robot model and its sensor data displayed in the robot's touch screen (and your VNC screen too!). To get familiar with the interface, adjust the laser scan visualisation options and see how these affect the output. Try to add new visualisation for sensors not included in the provided configuration (e.g. odometry). -->
 
 2. Teleoperate
-In a new terminal start the keyboard teleoperation node `ros2 run teleop_twist_keyboard teleop_twist_keyboard` and drive the robot around using the keyboard. Use the on-screen key hints to drive.
+In a new terminal start the keyboard teleoperation node and drive the robot around using the keyboard. Use the on-screen key hints to drive.
+```
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
 
 3. Publish velocity commands. Let's now send some basic robot control commands using ROS topics. The robot's speed can be controlled by the `/cmd_vel` topic. Use the `ros2 topic pub` functionality to send a single Twist message (linear and angular velocity command) as in this example:
 ```
@@ -170,8 +184,8 @@ ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0, y: 0.0
 Now, adjust the `linear.x` and `angular.z` components of the Twist message and see the resulting trajectory.
 
 4. Using your knowledge of the topic publishing, issue a series of commands that will drive the robot:
-    * in a circle with a radius of 0.5 m
-        * Hint: v=𝜔⋅r. Choose linear.x = 0.25, angular.z = 0.5;
+    * in a circle with a radius of 0.2 m
+        * Hint: v=𝜔⋅r. Choose linear.x = 0.25, angular.z = 0.2;
     * in a 1 m square, stop, rotate ~90°, repeat.
 
 Try using as few commands as possible. Publish a short repeating twist (hint: omit `--once` and use `--rate`)
