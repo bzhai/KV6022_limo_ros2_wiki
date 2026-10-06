@@ -200,8 +200,9 @@ Use `Ctrl-C` to stop publishing.
 
 # 7. If you want to set up your own ROS2 virtual machine in Virtual Box, VMWorkstation or Hyper-V(windows) you have to use Ubuntu 22x 
 * Install ROS humble dependencies
+* Learn how to create a simple ROS2 [publisher node](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html) and modify the example such that it sends a single `/cmd_vel` command to control LIMO from the script.
 ```
 sudo apt-get install ros-humble-gazebo-ros ros-humble-turtlebot3-gazebo ros-humble-turtlebot3-teleop ros-humble-xacro ros-humble-rqt* ros-humble-navigation2 ros-humble-nav2-bringup ros-humble-tf2-geometry-msgs ros-humble-turtle-tf2-py ros-humble-tf2-tools ros-humble-tf-transformations ros-humble-joint-state-publisher-gui ros-humble-joint-state-publisher ros-humble-joy-linux ros-humble-urg-node ros-humble-urg-node-msgs ros-humble-ros2bag python3-colcon-common-extensions -y
 ```
-* Learn how to create a simple ROS2 [publisher node](https://docs.ros.org/en/humble/Tutorials/Beginner-Client-Libraries/Writing-A-Simple-Py-Publisher-And-Subscriber.html) and modify the example such that it sends a single `/cmd_vel` command to control LIMO from the script.
+
 
