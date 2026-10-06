@@ -38,8 +38,9 @@ rviz2 -d ~/KV6022_limo_ros2/src/limo_gazebosim/rviz/urdf.rviz
 
 ## 2. Teleoperate LIMO with Differential, Ackerman and Mecanum steering
 You will drive any steering mode via `/cmd_vel` using the keyboard teleop.
-* First, start with a differential drive sterring
+* First, make sure you are under this directory `KV6022_limo_ros2` start with a differential drive sterring
 ```
+source install/setup.bash
 ros2 launch limo_gazebosim limo_gazebo_diff.launch.py
 ```
 * Next, try Ackermann steering mode
