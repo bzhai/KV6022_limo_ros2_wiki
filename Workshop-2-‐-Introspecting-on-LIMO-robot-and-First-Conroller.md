@@ -54,7 +54,9 @@ ros2 launch limo_gazebosim limo_gazebo_mecanum_drive.launch.py
 There are many ways to manage and edit your Python code but we will use VS Code. Install it using the following command:
 ```
 cd ~
-wget -O code_1.104.3-1759409451_amd64.deb https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64
+
+wget -O code_1.104.3-1759409451_amd64.deb https://vscode.download.prss.microsoft.com/dbazure/download/stable/07f806f999227108933c2e30515b26eecc1fda74/code_1.140.0-1790759618_amd64.deb
+
 sudo dpkg -i code_1.104.3-1759409451_amd64.deb
 ```
 Once installed, open the extensions tab `CTRL+SHIFT+X` and search for `ROS`. Install the `Microsoft ROS` extension.
