@@ -100,6 +100,7 @@ Then the code store these x, y and z in [PointStamped](https://docs.ros.org/en/n
     * Hint: Publish to `/cmd_vel` a zero velocity when `min_front_laser_scan < safety_radius`. You may consider to extend your code you wrote in Task 1.
 
 ### 4. Writing a Reactive Obstacle Avoidance Controller
+* Please visit the [KV6022 2026 Workshop](https://github.com/bzhai/KV6022_2026_limo_ros2) GitHub repository and download it as a ZIP file. Once downloaded, extract the `Week4_lab` folder from `src/Week4_lab` and copy it into your own `src` directory. Then, start working on the **CLOZE game Python script**.
 * Instead of stopping against the obstacle encountered, make the robot avoid obstacles accordingly. A simple method is to compare left vs right range distances and turn toward the more open side.
 * Slice the scan into more sectors (front-left, front, front-right) and design a simple controller. You should see that the length of the ranges array is 360 laser beams in the ~229-degree range of [-114.5, 114.5]. So if we want to read the LaserScan data on the left, in front and on the right of the robot, we can infer accordingly:
 ```
