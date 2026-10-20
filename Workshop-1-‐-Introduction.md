@@ -84,6 +84,7 @@ You will notice that `hello_world2.py` is no longer there.
 >ros2 daemon stop
 >ros2 daemon start
 >```
+> Please now either close all your opened terminals  
 
 Turtlesim is a lightweight 2D simulator or graphical user interface for learning core ROS 2 concepts, like nodes, topics, and services. It illustrates what ROS 2 does at the most basic level to give you an idea of what you will do with a real robot or a robot simulation later on. All of these concepts will be elaborated on in later workshops.
 
