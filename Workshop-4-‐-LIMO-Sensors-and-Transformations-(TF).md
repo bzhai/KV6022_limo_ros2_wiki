@@ -96,6 +96,7 @@ Then the code store these x, y and z in [PointStamped](https://docs.ros.org/en/n
 <img src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/nearest_laser.png" width="800">
 
 ### 3. Safely stop behavior
+The idea behind the **task3** and **task4** can be seen [task 3 and 4](https://bzhai.github.io/KV6022_2026_limo_ros2/index.html)
 * A mobile robot may not stop exactly in front of an obstacle; it leaves some extra space for safety, perhaps 50 cm or 30 cm. Define a threshold or more thresholds (for example, when the object is "close", "middle”, "far"), the minimum safe distance to an object, and program your robot so that it stops at this distance from an object. 
     * Hint: Publish to `/cmd_vel` a zero velocity when `min_front_laser_scan < safety_radius`. You may consider to extend your code you wrote in Task 1.
 
