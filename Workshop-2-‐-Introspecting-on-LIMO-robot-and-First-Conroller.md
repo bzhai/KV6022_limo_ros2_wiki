@@ -38,23 +38,26 @@ rviz2 -d ~/KV6022_limo_ros2/src/limo_gazebosim/rviz/urdf.rviz
 
 ## 2. Teleoperate LIMO with Differential, Ackerman and Mecanum steering
 You will drive any steering mode via `/cmd_vel` using the keyboard teleop.
-* First, start with a differential drive sterring
+* First, make sure you are under this directory `KV6022_limo_ros2` start with a differential drive sterring
 ```
+source install/setup.bash
 ros2 launch limo_gazebosim limo_gazebo_diff.launch.py
 ```
-* Next, try Ackermann steering mode
-```
-ros2 launch limo_gazebosim limo_gazebo_ackerman_drive.launch.py
-```
-* Finally, experiment Mecanum drive
+* Try to experiment Mecanum drive
 ```
 ros2 launch limo_gazebosim limo_gazebo_mecanum_drive.launch.py
+```
+* optional, try Ackermann steering mode
+```
+ros2 launch limo_gazebosim limo_gazebo_ackerman_drive.launch.py
 ```
 ## 3. Installing and Running Visual Studio Code (Vscode) 
 There are many ways to manage and edit your Python code but we will use VS Code. Install it using the following command:
 ```
 cd ~
-wget -O code_1.104.3-1759409451_amd64.deb https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64
+
+wget -O code_1.104.3-1759409451_amd64.deb https://vscode.download.prss.microsoft.com/dbazure/download/stable/07f806f999227108933c2e30515b26eecc1fda74/code_1.140.0-1790759618_amd64.deb
+
 sudo dpkg -i code_1.104.3-1759409451_amd64.deb
 ```
 Once installed, open the extensions tab `CTRL+SHIFT+X` and search for `ROS`. Install the `Microsoft ROS` extension.
