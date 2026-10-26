@@ -50,7 +50,7 @@ All the source code shown in the demonstration is available [here](https://githu
 
 <img width="800" height="300" class="center" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/color_detector.png" />
 
-### Task 5: Object Detection : Feature-based Approach
+### Task 4: Object Detection : Feature-based Approach
 
 * Review the documentation for [Find Object 2D](http://introlab.github.io/find-object/) and refer to [find\_object\_2d](http://wiki.ros.org/find_object_2d) wiki page (this is documentation for ROS1 but still applies). Also refer to [here](https://github.com/ros2-gbp/find_object_2d-release) for the usage on ROS2.
 * Read about the feature detectors and descriptors used in the [OpenCV Documentation](https://docs.opencv.org/3.0-beta/doc/py\_tutorials/py\_feature2d/py\_table\_of\_contents\_feature2d/py\_table\_of\_contents\_feature2d.html)
@@ -79,7 +79,7 @@ sudo apt-get install ros-humble-find-object-2d
 
 * To test detector robustness on scale and viewpoint changes, move the robot closer/farther or move the object to observe how detector reflects size changes. If detection drops, add another training view by repeating `Add object from scene` from a new viewpoint.
 
-### Task 6: Object Detection : Deep Learning-based Approach
+### Task 5: Object Detection : Deep Learning-based Approach
 For CNN-based object detection, we will use ROS 2 [package](https://github.com/mgonzs13/yolo_ros?tab=readme-ov-file) for YOLO models from [Ultralytics](https://github.com/ultralytics/ultralytics) to perform object detection and tracking which first introduced on its [original paper](https://pjreddie.com/media/files/papers/yolo_1.pdf).
 * Clone the `yolo_ros` repository into your workspace:
 ```
