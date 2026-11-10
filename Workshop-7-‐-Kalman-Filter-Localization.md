@@ -74,7 +74,7 @@ ros2 topic echo /odom/wheel --field pose.pose.position
 </p>
 
 ### Preparation 2: Adding noise to sensor measurements (wheel odometry, imu)
-* You will add noise to the odometry data to better reflect real-world scenario as Gazebo provides near-perfect sensory model. Review [noisy_odometry.py](https://github.com/kivrakh/KV6022_limo_ros2/blob/main/src/example_codes/example_codes/noisy_odometry.py) node which will add gaussion noise to odometry motion model similar to reflect below uncertainty in motion model explained [here](https://blog.lxsang.me/post/id/16).
+* You will add noise to the odometry data to better reflect real-world scenario as Gazebo provides near-perfect sensory model. Review [noisy_odometry.py](https://github.com/bzhai/KV6022_2026_limo_ros2/blob/main/src/Week7_lab/Week7_lab/noisy_odometry.py) node which will add gaussian noise to odometry motion model similar to reflect below uncertainty in motion model explained [here](https://blog.lxsang.me/post/id/16). You will run and experiment with this node in Task 1.
  
 <p align="center">
 <img width="620" height="440" alt="image" src="https://github.com/kivrakh/KV6022_limo_ros2/blob/main/wiki_images/odometry_motion%20model.png" />
@@ -97,7 +97,59 @@ ros2 run ros2_laser_scan_matcher laser_scan_matcher --ros-args -p publish_odom:=
 ```
 * Verify the laser odometry is being published `ros2 topic echo /odom/laser --field pose.pose.position`
 
-### Task1: Setting up Sensor Fusion Package (`robot_localization`)
+### Task 1: Running the Noisy Wheel Odometry Node (`Week7_lab`)
+
+Gazebo's wheel encoders give near-perfect odometry, so we first add artificial motion noise to imitate wheel slip and other real-world disturbances. The `Week7_lab` package of the 2026 course repository contains the `noisy_odometry` node, which subscribes to the encoder odometry on `/odom/wheel` and republishes it with Gaussian noise applied to the odometry motion model on `/odom/wheel/noisy`.
+
+* Get the `Week7_lab` package from the [KV6022 2026 Workshop](https://github.com/bzhai/KV6022_2026_limo_ros2) repository. Either download the repository as a ZIP file and copy the `src/Week7_lab` folder into your own `src` directory, or clone it into a temporary location and copy the package from there:
+```
+cd ~/KV6022_limo_ros2/src
+git clone https://github.com/bzhai/KV6022_2026_limo_ros2.git /tmp/KV6022_2026
+cp -r /tmp/KV6022_2026/src/Week7_lab .
+```
+* Install the dependency used for quaternion conversions and build only the new package:
+```
+sudo apt install ros-humble-tf-transformations
+cd ~/KV6022_limo_ros2
+colcon build --symlink-install --packages-select Week7_lab
+source install/setup.bash
+```
+* Open [noisy_odometry.py](https://github.com/bzhai/KV6022_2026_limo_ros2/blob/main/src/Week7_lab/Week7_lab/noisy_odometry.py) and read through the node before running it. The important parts are:
+   * It subscribes to `odom/wheel` and publishes `/odom/wheel/noisy`, so the noisy estimate is kept separate from the encoder odometry and from the ground truth on `/odom/perfect`.
+   * On the very first message it copies the encoder pose, so the noisy and clean odometry start from the same point.
+   * For every later message it decomposes the motion between consecutive encoder poses into an initial rotation `rot1`, a translation `trans` and a second rotation `rot2`, then perturbs each with Gaussian noise whose standard deviation grows with the amount of motion:
+     * `sd_rot1 = alpha1 * |rot1| + alpha2 * trans`
+     * `sd_rot2 = alpha1 * |rot2| + alpha2 * trans`
+     * `sd_trans = alpha3 * trans + alpha4 * (|rot1| + |rot2|)`
+   * The four `alpha` values are ROS parameters, so you can change the noise level without editing the code. Their defaults are `alpha1 = 0.05`, `alpha2 = 15°` (0.26 rad), `alpha3 = 0.05`, `alpha4 = 0.01`, and the frame used for the published message is set by `odom_frame` (default `odom`).
+
+* Start the Gazebo simulation from Preparation 1, then run the node in a second terminal:
+```
+ros2 run Week7_lab noisy_odometry
+```
+* Confirm the node is publishing and that it is subscribed to the encoder odometry:
+```
+ros2 topic info /odom/wheel/noisy
+ros2 topic info /odom/wheel
+```
+* Drive the robot with `rqt_robot_steering` as described in Task 4 (installing it there if needed) and compare the two estimates side by side while the robot moves:
+```
+ros2 topic echo /odom/wheel --field pose.pose.position
+ros2 topic echo /odom/wheel/noisy --field pose.pose.position
+```
+   * Drive straight and observe how the noisy estimate drifts away from `/odom/wheel` as the distance travelled increases.
+   * Rotate in place and observe the error in orientation and, consequently, in position.
+   * Notice that the error accumulates over the run even though the noise is added to each individual motion step. This growing uncertainty is exactly what the EKF in Task 2 tries to keep in check by fusing the IMU and laser odometry.
+
+* Stop the node and restart it with a stronger noise level, then repeat the comparison to see how each parameter affects the trajectory:
+```
+ros2 run Week7_lab noisy_odometry --ros-args -p alpha1:=0.2 -p alpha2:=0.5 -p alpha3:=0.2 -p alpha4:=0.05
+```
+   * `alpha1` and `alpha2` control the rotational noise, which dominates when the robot turns.
+   * `alpha3` and `alpha4` control the translational noise, which dominates on straight runs.
+   * Relate the shapes you observe to the uncertainty ellipses in the odometry motion model figure of Preparation 2, and note down the parameter values you used, as they will affect how well the filter performs in the next task.
+
+### Task 2: Setting up Sensor Fusion Package (`robot_localization`)
 We have odometry estimation coming from wheel encoders, imu and laser sensor. These sources will be combined through EKF algorithm to achieve better odometry and hence better position tracking. `robot_localization` [package](http://docs.ros.org/en/noetic/api/robot_localization/html/index.html) is the implementation of EKF which you will configure it to fuse noisy wheel odometry, IMU data and laser odometry for obtaining combined odometry.
 * First of all, clone the `robot_localization` package repository (humble branch) into your `KV6022_limo_ros2` workspace:
 ```
@@ -188,6 +240,8 @@ def generate_launch_description():
            ),
 ])
 </pre>
+
+
 * Build and source your workspace then launch the EKF node while `gazebo simulation`, `noisy_odometry` and `laser_scan_matcher` nodes are already working.
 ```
 colcon build
@@ -209,7 +263,7 @@ ros2 run rqt_graph rqt_graph
 
 Here, you should observe that `/ekf_filter_node` subscribes `/odom/wheel/noisy`, `/odom/filter` and `/imu` to publish filtered odometry on the `/odom/combined` topic. 
 
-### Task 2: Visualize Odometry sources with PlotJuggler
+### Task 3: Visualize Odometry sources with PlotJuggler
 
 To get better understand the sensor fusion for combined odometry, you will use [PlotJuggler](https://facontidavide.github.io/PlotJuggler/index.html) to visualize and analyze different odomety sources and compare it with ground truth robot's odometry data to verify the success of the EKF fusion algorithm.
 
@@ -246,7 +300,7 @@ ros2 run plotjuggler plotjuggler
 
    * Repeat this process to add `/odom/perfect` and `/odom/wheel/noisy` and `/odom/laser` for comparison. If you have difficulties please refer to [here](https://facontidavide.github.io/PlotJuggler/visualization_howto/index.html)
 
-### Task 3: Drive the Robot and Visualize in PlotJuggler
+### Task 4: Drive the Robot and Visualize in PlotJuggler
 
 Now, you will control the robot and observe the filtered and unfiltered positions and see how the EKF helps correct discrepancies unless the robot experiences wheel slip or collisions.
 * Open a new terminal and start the `rqt_robot_steering` graphical interface to control the LIMO robot:
